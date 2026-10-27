@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../styles.css?v=20261026b" />
 </head>
 <body class="locked">
   <!-- Preview gate: removed on launch day. See README. -->
@@ -24,6 +24,8 @@
     </form>
   </div>
 
+  <!-- The site is inert inside this template until gate.js unlocks it. -->
+  <template id="site">
   <header class="site-header">
     <a href="#top" class="brand">Kali <span class="brand-and">and</span> Kaden</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
@@ -209,7 +211,8 @@
     <p class="caps">Kali <span class="brand-and">and</span> Kaden &middot; August 14, 2027 &middot; Sun Valley, Idaho</p>
   </footer>
 
-  <script src="gate.js"></script>
-  <script src="../app.js"></script>
+  </template>
+
+  <script src="gate.js?v=20261026b"></script>
 </body>
 </html>

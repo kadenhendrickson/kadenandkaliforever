@@ -473,37 +473,21 @@ body.soon {
 .soon-main {
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 4rem var(--gutter);
 }
 
-.names-center { align-items: center; }
-.names-center .and { padding-left: 0; }
-
-.soon-meta {
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--rule);
-  min-width: min(20rem, 100%);
+.soon-title {
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: 0.02em;
 }
-
-.soon-note {
-  margin-top: 1.25rem;
-  font-style: italic;
-  color: var(--gray);
-}
-
-.site-footer-plain { border-top: 0; }
 
 /* ---------- Preview gate (admin/index.html) ---------- */
 body.locked { overflow: hidden; }
-body.locked > main,
-body.locked > .site-header,
-body.locked > .menu,
-body.locked > .site-footer { visibility: hidden; }
 
 .gate {
   position: fixed;

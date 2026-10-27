@@ -21,7 +21,8 @@ Google Sheet through a Google Apps Script web app.
 - `kadenandkali.com/` shows the coming-soon page.
 - `kadenandkali.com/admin/` shows the in-progress site after a password.
 
-The gate is client-side only. GitHub Pages serves every file publicly, so anyone who
+The site markup lives inside an inert `<template>` in `admin/index.html`, so nothing
+renders until the password matches. The gate is client-side only. GitHub Pages serves every file publicly, so anyone who
 knows the path can read the HTML with view-source. The gate keeps out guests who stumble
 on the URL and nothing more. The password is not in the repo, only its SHA-256 hash in
 `admin/gate.js`, which also explains how to change it. Unlocking is remembered for the
@@ -31,9 +32,11 @@ browser session via `sessionStorage`.
 
 1. Delete the root `index.html` (the coming-soon page).
 2. Move `admin/index.html` to `index.html`.
-3. In it, change `../styles.css` to `styles.css`, `../app.js` to `app.js`, remove the
-   `<script src="gate.js">` line, the `<div id="gate">` block, `class="locked"` on
-   `<body>`, and the `noindex` meta tag.
+3. In it: remove the `<div id="gate">` block and the `<template id="site">` and
+   `</template>` lines so the site markup sits directly in `<body>`; change
+   `../styles.css?v=...` to `styles.css`; replace the `gate.js` script tag with
+   `<script src="app.js"></script>`; remove `class="locked"` on `<body>` and the
+   `noindex` meta tag; restore the description meta tag.
 4. Delete the `admin/` folder.
 5. Commit and push.
 
