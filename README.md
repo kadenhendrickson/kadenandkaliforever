@@ -46,8 +46,9 @@ browser session via `sessionStorage`.
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000 for the coming-soon page and
-http://localhost:8000/admin/ for the gated site. The form posts to the live Apps Script endpoint, so
+Then open http://localhost:8000. On localhost the holding page redirects straight to
+`/admin/` and the gate unlocks without a password, so local development always shows
+the real site. The form posts to the live Apps Script endpoint, so
 local test submissions land in the real sheet. To work offline, temporarily blank out
 `CONFIG.APPS_SCRIPT_URL` in `app.js`; the form then runs in demo mode and only logs the
 payload to the browser console.

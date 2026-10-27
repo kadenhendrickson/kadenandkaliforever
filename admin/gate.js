@@ -8,6 +8,8 @@
    The site markup sits inside <template id="site">, which browsers
    never render, so nothing is on screen until the password matches.
    On unlock the template is stamped into the page and app.js loads.
+   On localhost the gate unlocks immediately so local development
+   never needs the password.
 
    To change the password, run:
      python3 -c "import hashlib; print(hashlib.sha256(input().encode()).hexdigest())"
@@ -42,7 +44,12 @@
     return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
   }
 
-  if (sessionStorage.getItem(STORAGE_KEY) === "1") {
+  // Local development: no password. Anything served from localhost or a
+  // loopback address unlocks immediately.
+  const LOCAL_HOSTS = ["localhost", "127.0.0.1", "[::1]"];
+  const isLocal = LOCAL_HOSTS.includes(location.hostname) || location.hostname.endsWith(".localhost");
+
+  if (isLocal || sessionStorage.getItem(STORAGE_KEY) === "1") {
     unlock();
     return;
   }
