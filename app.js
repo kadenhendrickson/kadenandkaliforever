@@ -6,28 +6,35 @@ const CONFIG = {
   // Leave empty to run the form in demo mode (logs to console, no network).
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec",
 
-  // Wedding date/time. Everyone is on the US West Coast, so this is
-  // interpreted in America/Los_Angeles (PDT in June = UTC-7).
-  WEDDING_DATE_ISO: "2027-06-12T16:00:00-07:00",
-  TIMEZONE: "America/Los_Angeles",
+  // Wedding date/time at the venue. Galena Lodge is in Mountain Time
+  // (America/Boise; MDT in August = UTC-6). Guests are mostly on the
+  // West Coast, but the date shown should be the venue's local date.
+  WEDDING_DATE_ISO: "2027-08-14T16:00:00-06:00",
+  TIMEZONE: "America/Boise",
 };
 
 /* =========================================================
-   Mobile nav
+   Full-screen menu
    ========================================================= */
-const navToggle = document.querySelector(".nav-toggle");
-const navLinks = document.getElementById("nav-links");
+const menuToggle = document.querySelector(".menu-toggle");
+const menu = document.getElementById("menu");
 
-navToggle.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
-  navToggle.setAttribute("aria-expanded", String(open));
+function setMenu(open) {
+  menu.classList.toggle("open", open);
+  menu.setAttribute("aria-hidden", String(!open));
+  menuToggle.setAttribute("aria-expanded", String(open));
+  menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  document.body.classList.toggle("menu-open", open);
+}
+
+menuToggle.addEventListener("click", () => setMenu(!menu.classList.contains("open")));
+
+menu.addEventListener("click", (e) => {
+  if (e.target.tagName === "A") setMenu(false);
 });
 
-navLinks.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") {
-    navLinks.classList.remove("open");
-    navToggle.setAttribute("aria-expanded", "false");
-  }
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") setMenu(false);
 });
 
 /* =========================================================
@@ -47,11 +54,11 @@ function updateCountdown() {
   const el = document.getElementById("countdown");
   const diffMs = weddingDate.getTime() - Date.now();
   if (diffMs <= 0) {
-    el.textContent = "Today's the day!";
+    el.textContent = "Today is the day";
     return;
   }
   const days = Math.floor(diffMs / 86_400_000);
-  el.textContent = days === 1 ? "1 day to go" : `${days} days to go`;
+  el.textContent = days === 1 ? "One day away" : `${days} days away`;
 }
 updateCountdown();
 setInterval(updateCountdown, 60_000);
@@ -91,7 +98,7 @@ form.addEventListener("submit", async (e) => {
 
   // Honeypot filled => likely a bot. Pretend success, do nothing.
   if (data.website) {
-    setStatus("Thank you! Your RSVP has been received.", "success");
+    setStatus("Thank you. Your reply has been received.", "success");
     form.reset();
     return;
   }
@@ -103,7 +110,7 @@ form.addEventListener("submit", async (e) => {
   }
 
   submitBtn.disabled = true;
-  setStatus("Sending…");
+  setStatus("Sending\u2026");
 
   try {
     if (!CONFIG.APPS_SCRIPT_URL) {
@@ -121,7 +128,7 @@ form.addEventListener("submit", async (e) => {
       if (!json.ok) throw new Error(json.error || "Unknown error");
     }
 
-    setStatus("Thank you! Your RSVP has been received.", "success");
+    setStatus("Thank you. Your reply has been received.", "success");
     form.reset();
     guestsRow.classList.remove("hidden");
     dietaryRow.classList.remove("hidden");

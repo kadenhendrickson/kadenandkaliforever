@@ -1,6 +1,8 @@
 # Wedding Website
 
-A single-page, responsive wedding site with no build step. RSVPs are written to a
+Kali and Kaden's wedding site. Galena Lodge, Sun Valley, Idaho. August 14, 2027.
+
+A single-page, responsive site with no build step. RSVPs are written to a
 Google Sheet through a Google Apps Script web app.
 
 ## Files
@@ -102,5 +104,10 @@ Pages settings and point your DNS at GitHub per their instructions.
 
 - Names, dates, venues, and copy: `index.html`
 - Wedding date for the countdown: `CONFIG.WEDDING_DATE_ISO` in `app.js`
-  (set in Pacific time; `-07:00` is PDT, `-08:00` is PST)
+  (set in the venue's Mountain time; `-06:00` is MDT, `-07:00` is MST)
+- Fonts: Cormorant Garamond (display) and EB Garamond (text), loaded from Google Fonts
+  in `index.html`. The design follows Bliss & Bone's "Rivera" template: monochrome,
+  one serif family, hairline rules, full-screen menu, black-and-white photography.
+- Photos: replace the `.photo-placeholder` divs in `index.html` with `<img>` tags. The
+  CSS renders them in grayscale automatically.
 - Colors and fonts: the `:root` tokens at the top of `styles.css`
