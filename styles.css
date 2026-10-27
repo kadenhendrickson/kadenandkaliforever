@@ -1,0 +1,291 @@
+/* ---------- Tokens ---------- */
+:root {
+  --color-bg: #fdfbf7;
+  --color-bg-alt: #f3ede4;
+  --color-text: #2b2b2b;
+  --color-muted: #6b6b6b;
+  --color-accent: #7a5c3e;
+  --color-accent-dark: #5e452c;
+  --color-border: #d9d2c5;
+  --color-success: #2e7d4f;
+  --color-error: #b3261e;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --max-width: 60rem;
+  --radius: 0.5rem;
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 4rem; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); text-align: center; }
+h3 { font-size: 1.35rem; }
+
+a { color: var(--color-accent); }
+
+/* ---------- Header / Nav ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(253, 251, 247, 0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.nav-brand {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.nav-toggle {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 1.25rem;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+}
+
+.nav-links.open { display: flex; }
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-text);
+  padding: 0.5rem 0;
+  display: block;
+}
+
+.nav-cta {
+  color: var(--color-accent) !important;
+  font-weight: 600;
+}
+
+@media (min-width: 640px) {
+  .nav-toggle { display: none; }
+  .nav-links {
+    display: flex;
+    width: auto;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding-top: 0;
+  }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  text-align: center;
+  padding: clamp(3rem, 10vw, 7rem) 1rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin: 0 0 1rem;
+}
+
+.hero-names {
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
+  margin-bottom: 1rem;
+}
+
+.amp { font-style: italic; color: var(--color-accent); }
+
+.hero-date { font-size: 1.25rem; margin: 0; }
+.hero-location { color: var(--color-muted); margin: 0.25rem 0 1rem; }
+.hero-countdown { color: var(--color-muted); font-size: 0.95rem; margin: 0 0 1.5rem; min-height: 1.5em; }
+
+/* ---------- Sections ---------- */
+.section {
+  padding: clamp(2.5rem, 6vw, 5rem) 1rem;
+}
+
+.section > * {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-alt { background: var(--color-bg-alt); }
+
+.section p { max-width: 40rem; }
+.section-intro { text-align: center; color: var(--color-muted); }
+
+/* ---------- Cards ---------- */
+.cards {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card p { margin: 0.25rem 0; }
+.card-time { color: var(--color-accent); font-weight: 600; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-accent);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.btn-primary:hover { background: var(--color-accent-dark); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ---------- Form ---------- */
+.form {
+  max-width: 32rem;
+  margin: 2rem auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.form-row.hidden { display: none; }
+
+label, legend { font-weight: 600; font-size: 0.95rem; }
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--color-text);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+textarea { resize: vertical; }
+
+.radio-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+@media (min-width: 480px) {
+  .radio-group { flex-direction: row; gap: 1.5rem; }
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.radio input { accent-color: var(--color-accent); width: 1.1rem; height: 1.1rem; }
+
+/* Honeypot: visually hidden, still in DOM for bots */
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  margin: 0;
+  min-height: 1.5em;
+  text-align: center;
+}
+
+.form-status.success { color: var(--color-success); }
+.form-status.error { color: var(--color-error); }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

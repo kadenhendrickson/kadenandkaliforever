@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner One &amp; Partner Two — We're Getting Married</title>
+  <meta name="description" content="Wedding details and RSVP for Partner One and Partner Two." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a href="#top" class="nav-brand">P &amp; P</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+      <ul id="nav-links" class="nav-links">
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#details">Details</a></li>
+        <li><a href="#travel">Travel</a></li>
+        <li><a href="#rsvp" class="nav-cta">RSVP</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <p class="hero-eyebrow">We're getting married</p>
+      <h1 class="hero-names">Partner One <span class="amp">&amp;</span> Partner Two</h1>
+      <p class="hero-date" id="hero-date">Saturday, June 12, 2027</p>
+      <p class="hero-location">Seattle, Washington</p>
+      <p class="hero-countdown" id="countdown" aria-live="polite"></p>
+      <a href="#rsvp" class="btn btn-primary">RSVP</a>
+    </section>
+
+    <!-- Our Story -->
+    <section id="story" class="section">
+      <h2>Our Story</h2>
+      <p>
+        This is a placeholder for your story. Write a few sentences about how you met,
+        your favorite memories together, and what you're most looking forward to.
+      </p>
+    </section>
+
+    <!-- Details -->
+    <section id="details" class="section section-alt">
+      <h2>The Details</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Ceremony</h3>
+          <p class="card-time">4:00 PM</p>
+          <p>Venue Name<br />123 Example Street<br />Seattle, WA 98101</p>
+        </article>
+        <article class="card">
+          <h3>Reception</h3>
+          <p class="card-time">6:00 PM</p>
+          <p>Venue Name<br />123 Example Street<br />Seattle, WA 98101</p>
+        </article>
+        <article class="card">
+          <h3>Dress Code</h3>
+          <p class="card-time">Cocktail Attire</p>
+          <p>Dress to celebrate. The ceremony is outdoors, so plan for the weather.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Travel -->
+    <section id="travel" class="section">
+      <h2>Travel &amp; Stay</h2>
+      <p>
+        Placeholder for hotel blocks, airport info, and parking. Add links to nearby
+        hotels and any room-block codes here.
+      </p>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp" class="section section-alt">
+      <h2>RSVP</h2>
+      <p class="section-intro">Kindly respond by <strong>May 1, 2027</strong>.</p>
+
+      <form id="rsvp-form" class="form" novalidate>
+        <div class="form-row">
+          <label for="name">Full name <span aria-hidden="true">*</span></label>
+          <input type="text" id="name" name="name" autocomplete="name" required />
+        </div>
+
+        <div class="form-row">
+          <label for="email">Email <span aria-hidden="true">*</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" required />
+        </div>
+
+        <fieldset class="form-row">
+          <legend>Will you be attending? <span aria-hidden="true">*</span></legend>
+          <div class="radio-group">
+            <label class="radio">
+              <input type="radio" name="attending" value="Yes" required />
+              <span>Joyfully accept</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="attending" value="No" />
+              <span>Regretfully decline</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-row" id="guests-row">
+          <label for="guests">Number of guests (including you)</label>
+          <select id="guests" name="guests">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+
+        <div class="form-row" id="dietary-row">
+          <label for="dietary">Dietary restrictions</label>
+          <input type="text" id="dietary" name="dietary" placeholder="Vegetarian, gluten-free, allergies…" />
+        </div>
+
+        <div class="form-row">
+          <label for="message">Message for the couple</label>
+          <textarea id="message" name="message" rows="3"></textarea>
+        </div>
+
+        <!-- Honeypot: hidden from humans, bots tend to fill it -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn">Send RSVP</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Partner One &amp; Partner Two · June 12, 2027 · Seattle, WA</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
