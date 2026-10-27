@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kali &amp; Kaden &middot; Preview</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="locked">
+  <!-- Preview gate: removed on launch day. See README. -->
+  <div id="gate" class="gate">
+    <form id="gate-form" class="gate-form" novalidate>
+      <p class="caps label">Kali <span class="brand-and">and</span> Kaden</p>
+      <label for="gate-password" class="gate-prompt">This page is still being written.</label>
+      <input type="password" id="gate-password" name="password" autocomplete="current-password" autofocus aria-describedby="gate-status" />
+      <div class="form-actions">
+        <button type="submit" class="button">Enter</button>
+        <p class="form-status" id="gate-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+
+  <header class="site-header">
+    <a href="#top" class="brand">Kali <span class="brand-and">and</span> Kaden</a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav id="menu" class="menu" aria-hidden="true">
+    <ul class="menu-list">
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#details">The Wedding</a></li>
+      <li><a href="#travel">Travel</a></li>
+      <li><a href="#rsvp">RSVP</a></li>
+    </ul>
+    <p class="menu-foot">August 14, 2027 &middot; Sun Valley, Idaho</p>
+  </nav>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <h1 class="names">
+          <span class="name">Kali</span>
+          <span class="and">and</span>
+          <span class="name">Kaden</span>
+        </h1>
+        <div class="hero-meta">
+          <p class="caps" id="hero-date">Saturday, August 14, 2027</p>
+          <p class="caps">Galena Lodge &middot; Sun Valley, Idaho</p>
+          <p class="hero-countdown" id="countdown" aria-live="polite"></p>
+        </div>
+      </div>
+      <a href="#story" class="scroll-cue" aria-label="Scroll to content">
+        <span class="caps">Scroll</span>
+      </a>
+    </section>
+
+    <!-- Photo -->
+    <figure class="photo photo-full" role="img" aria-label="Photo of Kali and Kaden">
+      <!-- Replace the div below with <img src="images/hero.jpg" alt=""> -->
+      <div class="photo-placeholder"><span class="caps">Photograph</span></div>
+    </figure>
+
+    <!-- Our Story -->
+    <section id="story" class="section">
+      <div class="section-inner narrow">
+        <p class="caps label">Our Story</p>
+        <h2 class="display">A few words about us</h2>
+        <p class="lede">
+          This is a placeholder for your story. Write a few sentences about how you met,
+          your favorite memories together, and what you are most looking forward to.
+        </p>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <!-- The Wedding -->
+    <section id="details" class="section">
+      <div class="section-inner">
+        <p class="caps label">The Wedding</p>
+        <div class="columns">
+          <div class="col">
+            <h2 class="display">The Ceremony</h2>
+            <p class="caps">Saturday, August 14, 2027</p>
+            <p class="caps">Four o&rsquo;clock in the afternoon</p>
+            <p class="detail">
+              Galena Lodge<br />
+              15187 Highway 75<br />
+              Ketchum, Idaho 83340
+            </p>
+          </div>
+          <div class="col">
+            <h2 class="display">The Reception</h2>
+            <p class="caps">To follow</p>
+            <p class="caps">Six o&rsquo;clock in the evening</p>
+            <p class="detail">
+              Galena Lodge<br />
+              15187 Highway 75<br />
+              Ketchum, Idaho 83340
+            </p>
+          </div>
+        </div>
+        <div class="columns columns-tight">
+          <div class="col">
+            <p class="caps label-sm">Attire</p>
+            <p class="detail">Cocktail attire. The ceremony is outdoors at 7,300 feet, so bring a layer for the evening.</p>
+          </div>
+          <div class="col">
+            <p class="caps label-sm">Parking</p>
+            <p class="detail">Placeholder for parking and arrival instructions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="rule" />
+
+    <!-- Travel -->
+    <section id="travel" class="section">
+      <div class="section-inner narrow">
+        <p class="caps label">Travel &amp; Stay</p>
+        <h2 class="display">Getting here</h2>
+        <p class="lede">
+          Placeholder for hotel blocks, airport information, and transportation. Add links to
+          nearby hotels and any room-block codes here.
+        </p>
+      </div>
+    </section>
+
+    <!-- Photo -->
+    <figure class="photo photo-inset" role="img" aria-label="Photo of Kali and Kaden">
+      <div class="photo-placeholder"><span class="caps">Photograph</span></div>
+    </figure>
+
+    <!-- RSVP -->
+    <section id="rsvp" class="section section-dark">
+      <div class="section-inner narrow">
+        <p class="caps label">RSVP</p>
+        <h2 class="display">Kindly reply by the first of May</h2>
+
+        <form id="rsvp-form" class="form" novalidate>
+          <div class="field">
+            <label for="name" class="caps">Full name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="email" class="caps">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+
+          <fieldset class="field">
+            <legend class="caps">Will you attend</legend>
+            <div class="choices">
+              <label class="choice">
+                <input type="radio" name="attending" value="Yes" required />
+                <span>Joyfully accepts</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="attending" value="No" />
+                <span>Regretfully declines</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field" id="guests-row">
+            <label for="guests" class="caps">Guests in your party</label>
+            <select id="guests" name="guests">
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+              <option value="4">Four</option>
+            </select>
+          </div>
+
+          <div class="field" id="dietary-row">
+            <label for="dietary" class="caps">Dietary restrictions</label>
+            <input type="text" id="dietary" name="dietary" />
+          </div>
+
+          <div class="field">
+            <label for="message" class="caps">A note for the couple</label>
+            <textarea id="message" name="message" rows="2"></textarea>
+          </div>
+
+          <!-- Honeypot: hidden from humans, bots tend to fill it -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="button" id="submit-btn">Send reply</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="caps">Kali <span class="brand-and">and</span> Kaden &middot; August 14, 2027 &middot; Sun Valley, Idaho</p>
+  </footer>
+
+  <script src="gate.js"></script>
+  <script src="../app.js"></script>
+</body>
+</html>

@@ -9,10 +9,33 @@ Google Sheet through a Google Apps Script web app.
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Page structure: hero, story, details, travel, RSVP form |
-| `styles.css` | Mobile-first styling (plain CSS, no framework) |
-| `app.js` | Nav toggle, countdown, RSVP form submission. **Config lives at the top.** |
+| `index.html` | **Coming-soon page** served at the root until launch |
+| `admin/index.html` | The real site, behind a light password gate |
+| `admin/gate.js` | The gate: prompts for the password, compares a SHA-256 hash, unlocks for the session |
+| `styles.css` | Shared styles for both pages (plain CSS, no framework) |
+| `app.js` | Menu, countdown, RSVP submission. **Config lives at the top.** |
 | `apps-script/Code.gs` | Backend that appends RSVPs to the sheet |
+
+## Site structure until launch
+
+- `kadenandkali.com/` shows the coming-soon page.
+- `kadenandkali.com/admin/` shows the in-progress site after a password.
+
+The gate is client-side only. GitHub Pages serves every file publicly, so anyone who
+knows the path can read the HTML with view-source. The gate keeps out guests who stumble
+on the URL and nothing more. The password is not in the repo, only its SHA-256 hash in
+`admin/gate.js`, which also explains how to change it. Unlocking is remembered for the
+browser session via `sessionStorage`.
+
+### Launch day
+
+1. Delete the root `index.html` (the coming-soon page).
+2. Move `admin/index.html` to `index.html`.
+3. In it, change `../styles.css` to `styles.css`, `../app.js` to `app.js`, remove the
+   `<script src="gate.js">` line, the `<div id="gate">` block, `class="locked"` on
+   `<body>`, and the `noindex` meta tag.
+4. Delete the `admin/` folder.
+5. Commit and push.
 
 ## Local preview
 
@@ -20,7 +43,8 @@ Google Sheet through a Google Apps Script web app.
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. The form posts to the live Apps Script endpoint, so
+Then open http://localhost:8000 for the coming-soon page and
+http://localhost:8000/admin/ for the gated site. The form posts to the live Apps Script endpoint, so
 local test submissions land in the real sheet. To work offline, temporarily blank out
 `CONFIG.APPS_SCRIPT_URL` in `app.js`; the form then runs in demo mode and only logs the
 payload to the browser console.
@@ -90,15 +114,30 @@ forcing the method makes curl re-POST to the redirect target, which returns a Go
 
 ## Hosting (GitHub Pages)
 
-The site is three static files with no build step.
+The site is static files with no build step. Every push to `main` redeploys automatically.
+Pages is configured to deploy from the `main` branch root.
 
-1. Create a GitHub repository and push this folder to the `main` branch.
-2. In the repo, open **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, select `main` and `/ (root)`, then save.
-4. The site publishes at `https://<username>.github.io/<repo>/` within a minute or two.
+### Custom domain: kadenandkali.com
 
-Every push to `main` redeploys automatically. For a custom domain, add it under the same
-Pages settings and point your DNS at GitHub per their instructions.
+Do the DNS step first. Once a `CNAME` file exists in the repo, GitHub redirects the
+github.io URL to the custom domain, so if DNS is not ready the site goes dark.
+
+1. At the domain registrar, add these records:
+
+   | Type | Name | Value |
+   | --- | --- | --- |
+   | A | `@` | `185.199.108.153` |
+   | A | `@` | `185.199.109.153` |
+   | A | `@` | `185.199.110.153` |
+   | A | `@` | `185.199.111.153` |
+   | CNAME | `www` | `kadenhendrickson.github.io` |
+
+2. Wait for DNS to propagate (`dig kadenandkali.com +short` should list the four IPs).
+3. Add a file named `CNAME` to the repo root containing `kadenandkali.com` and push, or
+   enter the domain under **Settings → Pages → Custom domain**, which creates the file.
+4. Once the DNS check passes, enable **Enforce HTTPS** on the same settings page.
+
+After this the site is served at the root of the domain, and `www` redirects to the apex.
 
 ## Customizing
 

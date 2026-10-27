@@ -353,6 +353,7 @@ body.menu-open { overflow: hidden; }
 
 input[type="text"],
 input[type="email"],
+input[type="password"],
 select,
 textarea {
   width: 100%;
@@ -461,3 +462,83 @@ textarea { resize: vertical; min-height: 3rem; }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
+
+/* ---------- Coming soon (root index.html) ---------- */
+body.soon {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.soon-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem var(--gutter);
+}
+
+.names-center { align-items: center; }
+.names-center .and { padding-left: 0; }
+
+.soon-meta {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  min-width: min(20rem, 100%);
+}
+
+.soon-note {
+  margin-top: 1.25rem;
+  font-style: italic;
+  color: var(--gray);
+}
+
+.site-footer-plain { border-top: 0; }
+
+/* ---------- Preview gate (admin/index.html) ---------- */
+body.locked { overflow: hidden; }
+body.locked > main,
+body.locked > .site-header,
+body.locked > .menu,
+body.locked > .site-footer { visibility: hidden; }
+
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+}
+
+.gate-form {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.gate-form .label { margin-bottom: 0.5rem; }
+
+.gate-prompt {
+  font-family: var(--serif-display);
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+.gate-form input[type="password"] {
+  border-bottom-color: var(--rule);
+  color: var(--ink);
+}
+
+.gate-form input[type="password"]:focus { border-bottom-color: var(--ink); }
+
+.gate-form .button:hover { background: var(--ink); color: var(--paper); }
+.gate-form .form-status { color: var(--gray); }
+.gate-form .form-status.error { color: #a33a2f; }
