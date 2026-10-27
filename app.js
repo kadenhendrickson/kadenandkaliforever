@@ -4,7 +4,7 @@
 const CONFIG = {
   // Paste the "Web app" URL from your Apps Script deployment here.
   // Leave empty to run the form in demo mode (logs to console, no network).
-  APPS_SCRIPT_URL: "",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec",
 
   // Wedding date/time. Everyone is on the US West Coast, so this is
   // interpreted in America/Los_Angeles (PDT in June = UTC-7).
