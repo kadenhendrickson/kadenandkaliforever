@@ -105,16 +105,17 @@ function handleLookup_(body) {
 
   if (!match) return json_({ ok: true, found: false });
 
-  const partyMembers = match.party
-    ? guests.filter((g) => g.party === match.party).map((g) => g.display)
-    : [match.display];
+  const partyRows = match.party ? guests.filter((g) => g.party === match.party) : [match];
+  const partyMembers = partyRows.map((g) => g.display);
+  // Maximum Guests applies to the household: use the largest value in the party.
+  const maxGuests = Math.max.apply(null, partyRows.map((g) => g.maxGuests));
 
   return json_({
     ok: true,
     found: true,
     name: match.display,
     party: match.party,
-    maxGuests: match.maxGuests,
+    maxGuests: maxGuests,
     partyMembers: partyMembers,
     replies: findReplies_(match.party, partyMembers),
   });
@@ -152,7 +153,7 @@ function findReplies_(party, members) {
       email: String(row[table.col["Email"]] || ""),
       dietary: String(row[table.col["Dietary"]] || ""),
       message: String(row[table.col["Message"]] || ""),
-      updated: String(row[table.col["Last Updated"]] || row[table.col["Timestamp (MT)"]] || ""),
+      updated: stamp_(row[table.col["Last Updated"]] || row[table.col["Timestamp (MT)"]]),
     };
   });
 
@@ -338,6 +339,15 @@ function handleRsvp_(body) {
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+/** Sheets auto-converts "yyyy-MM-dd HH:mm:ss" cells to Dates; render them back as text. */
+function stamp_(value) {
+  if (!value) return "";
+  if (Object.prototype.toString.call(value) === "[object Date]") {
+    return Utilities.formatDate(value, TIMEZONE, "yyyy-MM-dd HH:mm:ss");
+  }
+  return String(value);
 }
 
 /** Reads the RSVPs tab into { sheet, header, col (header → index), rows }. */

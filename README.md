@@ -16,6 +16,7 @@ Google Sheet through a Google Apps Script web app.
 | `styles.css` | Shared styles for both pages (plain CSS, no framework) |
 | `app.js` | Menu, countdown, RSVP submission and pre-fill |
 | `apps-script/Code.gs` | Backend: RSVP writes and guest lookup |
+| `assets/` | Favicons, Apple touch icon, and the 1200×630 link-preview image |
 
 ## Site structure until launch
 
@@ -214,6 +215,17 @@ github.io URL to the custom domain, so if DNS is not ready the site goes dark.
 4. Once the DNS check passes, enable **Enforce HTTPS** on the same settings page.
 
 After this the site is served at the root of the domain, and `www` redirects to the apex.
+
+## Icons and link previews
+
+`assets/og-image.png` is what iMessage, Slack, and social apps show when the link is
+shared; `assets/apple-touch-icon.png` is the home-screen icon; the favicons are an
+italic ampersand. All were rendered with ImageMagick using the site's fonts (Cormorant
+Garamond and EB Garamond). To regenerate after a text change, fetch the TTFs from Google
+Fonts and rerun a `magick` command with the same palette (`#f7f5f1` cream, `#231f20` ink).
+
+Link-preview apps cache aggressively. After changing the image, share the URL with a
+query string (e.g. `?v=2`) to force a fresh preview, or keep the filename versioned.
 
 ## Customizing
 

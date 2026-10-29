@@ -86,8 +86,11 @@ const replyFor = (memberName) => replies.find((r) => r.member === memberName) ||
 const ownReply = recognizedGuest ? (replyFor(recognizedGuest.name) || replies[0] || null) : null;
 
 function formatReplyDate(stamp) {
-  // Backend stamps look like "2026-10-29 12:00:00" in Mountain Time.
-  const d = new Date(String(stamp).replace(" ", "T"));
+  // Stamps are usually "2026-10-29 12:00:00" (Mountain Time), but Sheets may
+  // hand back a full date string if the cell was auto-converted to a date.
+  const raw = String(stamp || "");
+  let d = new Date(raw.replace(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})$/, "$1T$2"));
+  if (isNaN(d)) d = new Date(raw);
   if (isNaN(d)) return "";
   return d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
 }
