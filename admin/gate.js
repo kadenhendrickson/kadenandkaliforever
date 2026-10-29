@@ -15,7 +15,7 @@
    ========================================================= */
 (() => {
   const CONFIG = window.KK_CONFIG;
-  const APP_SCRIPT = "../app.js?v=20261029";
+  const APP_SCRIPT = "../app.js?v=20261029b";
   const UNLOCK_KEY = "kk-preview-unlocked";
 
   const gate = document.getElementById("gate");
@@ -80,7 +80,11 @@
         }));
         unlock();
       } else {
-        setStatus("We couldn’t find that name. Try your full name as it appears on your invitation.", true);
+        setStatus(
+          "We couldn’t find that name, sorry. Try another spelling, or your full first and last name as written on your invitation. " +
+          "If you’re still having trouble, reach out to Kaden or Kali and we’ll get you in.",
+          false
+        );
         input.select();
         button.disabled = false;
       }
