@@ -15,7 +15,7 @@
    ========================================================= */
 (() => {
   const CONFIG = window.KK_CONFIG;
-  const APP_SCRIPT = "../app.js?v=20261029c";
+  const APP_SCRIPT = "../app.js?v=20261029d";
   const UNLOCK_KEY = "kk-preview-unlocked";
 
   const gate = document.getElementById("gate");
@@ -77,6 +77,7 @@
           party: data.party,
           maxGuests: data.maxGuests,
           partyMembers: data.partyMembers,
+          replies: data.replies || [],
         }));
         unlock();
       } else {

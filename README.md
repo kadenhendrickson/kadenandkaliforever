@@ -49,6 +49,25 @@ larger than the party), the RSVP form switches to party mode:
 A single-person party, or an unrecognized visitor (for example on localhost), gets the
 simple form: one name, accept/decline, and a guest-count dropdown.
 
+### Returning guests and updates
+
+The lookup also returns each party member's latest reply from the RSVPs tab. When a
+guest comes back, the form shows who has already answered (with a "Replied <date>"
+tag), pre-selects their answers, restores email, dietary note, message, and any
+additional guests, and the button reads **Update reply**.
+
+Submitting again does not add duplicate rows. The backend matches each person by
+normalized name (and party) to their existing row and overwrites it, setting the
+**Last Updated** column. The original **Timestamp (MT)** keeps the time of the first
+reply. People without an existing row are appended.
+
+To see who has not replied, add a column to the Guests tab with this formula in row 2
+and fill it down:
+
+```
+=IF(COUNTIF(RSVPs!B:B, A2&" "&B2)>0, "Replied", "")
+```
+
 Name matching is forgiving: case, accents, punctuation, and extra spaces are ignored, and
 "Robert James Smith" matches "Robert Smith". The **Aliases** column holds comma-separated
 alternates such as nicknames or maiden names. Guest data is cached in the script for five

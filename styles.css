@@ -310,6 +310,8 @@ body.menu-open { overflow: hidden; }
 .section-dark .detail { color: var(--dark-text); }
 
 .section-dark .label { opacity: 0.6; }
+.section-dark .choice input { border-color: rgba(239, 236, 231, 0.7); }
+.section-dark .choice input:checked { border-color: var(--dark-text); }
 
 /* ---------- Buttons ---------- */
 .button {
@@ -403,6 +405,7 @@ textarea { resize: vertical; min-height: 3rem; }
 .choice input {
   appearance: none;
   -webkit-appearance: none;
+  color: inherit;            /* form controls default to a dark UA color */
   width: 0.85rem;
   height: 0.85rem;
   margin: 0;
@@ -567,6 +570,7 @@ body.locked { overflow: hidden; }
 .party-name input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
+  color: inherit;
   width: 0.85rem;
   height: 0.85rem;
   margin: 0;
@@ -594,3 +598,12 @@ body.locked { overflow: hidden; }
 
 .party-extra .field { width: 100%; }
 .party-extra input::placeholder { opacity: 0.5; }
+
+.party-note {
+  font-family: var(--serif-text);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-left: 0.5rem;
+}

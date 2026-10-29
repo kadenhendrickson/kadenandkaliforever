@@ -79,6 +79,30 @@ const maxGuests = recognizedGuest ? Math.max(1, Number(recognizedGuest.maxGuests
 const extraSeats = Math.max(0, maxGuests - partyMembers.length);
 const partyMode = partyMembers.length > 1 || extraSeats > 0;
 
+// Previous replies for this party, returned by the gate lookup.
+const replies = (recognizedGuest && Array.isArray(recognizedGuest.replies)) ? recognizedGuest.replies : [];
+const hasReplied = replies.length > 0;
+const replyFor = (memberName) => replies.find((r) => r.member === memberName) || null;
+const ownReply = recognizedGuest ? (replyFor(recognizedGuest.name) || replies[0] || null) : null;
+
+function formatReplyDate(stamp) {
+  // Backend stamps look like "2026-10-29 12:00:00" in Mountain Time.
+  const d = new Date(String(stamp).replace(" ", "T"));
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+}
+
+// Pre-fill shared fields from the previous reply, if any.
+if (ownReply) {
+  const emailInput = document.getElementById("email");
+  const dietaryInput = document.getElementById("dietary");
+  const messageInput = document.getElementById("message");
+  if (emailInput && !emailInput.value) emailInput.value = ownReply.email || "";
+  if (dietaryInput && !dietaryInput.value) dietaryInput.value = ownReply.dietary || "";
+  if (messageInput && !messageInput.value) messageInput.value = ownReply.message || "";
+}
+if (hasReplied) submitBtn.textContent = "Update reply";
+
 if (recognizedGuest && nameInput && !nameInput.value) {
   nameInput.value = recognizedGuest.name || "";
 }
@@ -89,32 +113,39 @@ function slug(text) {
 }
 
 function memberRow(name, index, checkedByDefault) {
-  const id = `m${index}-${slug(name)}`;
+  const prev = replyFor(name);
+  const checked = prev ? true : checkedByDefault;
+  const yes = prev && prev.attending === "Yes" ? "checked" : "";
+  const no = prev && prev.attending === "No" ? "checked" : "";
+  const when = prev ? formatReplyDate(prev.updated) : "";
+  const note = prev ? `<span class="party-note">Replied${when ? " " + when : ""}</span>` : "";
   return `
     <li class="party-member" data-member="${index}">
       <label class="choice party-name">
-        <input type="checkbox" name="member" value="${index}" ${checkedByDefault ? "checked" : ""} />
+        <input type="checkbox" name="member" value="${index}" ${checked ? "checked" : ""} />
         <span>${name}</span>
+        ${note}
       </label>
       <div class="choices party-answer">
         <label class="choice">
-          <input type="radio" name="attending-${index}" value="Yes" />
+          <input type="radio" name="attending-${index}" value="Yes" ${yes} />
           <span>Accepts</span>
         </label>
         <label class="choice">
-          <input type="radio" name="attending-${index}" value="No" />
+          <input type="radio" name="attending-${index}" value="No" ${no} />
           <span>Declines</span>
         </label>
       </div>
     </li>`;
 }
 
-function extraRow(index) {
+function extraRow(index, prefill) {
+  const value = prefill ? ` value="${String(prefill).replace(/"/g, "&quot;")}"` : "";
   return `
     <li class="party-member party-extra" data-extra="${index}">
       <div class="field">
         <label for="extra-${index}" class="caps">Additional guest</label>
-        <input type="text" id="extra-${index}" name="extra-${index}" placeholder="Full name, if bringing someone" />
+        <input type="text" id="extra-${index}" name="extra-${index}"${value} placeholder="Full name, if bringing someone" />
       </div>
     </li>`;
 }
@@ -124,12 +155,16 @@ if (partyMode) {
 
   const mine = recognizedGuest.name;
   const rows = partyMembers.map((n, i) => memberRow(n, i, n === mine)).join("");
-  const extras = Array.from({ length: extraSeats }, (_, i) => extraRow(i)).join("");
+  const previousExtras = replies.filter((r) => r.additional && !r.member).map((r) => r.name);
+  const extras = Array.from({ length: extraSeats }, (_, i) => extraRow(i, previousExtras[i])).join("");
+  const help = hasReplied
+    ? "You’ve already replied. Change anything below and send it again."
+    : "Tick everyone you are answering for, then let us know for each.";
 
   partyBlock.innerHTML = `
     <fieldset class="field party">
       <legend class="caps">Replying for</legend>
-      <p class="party-help">Tick everyone you are answering for, then let us know for each.</p>
+      <p class="party-help">${help}</p>
       <ul class="party-list">${rows}${extras}</ul>
     </fieldset>`;
   partyBlock.hidden = false;
@@ -159,10 +194,28 @@ if (partyMode) {
     radio.required = true;
     radio.addEventListener("change", () => {
       const declining = radio.value === "No" && radio.checked;
-      guestsRow.classList.toggle("hidden", declining);
+      const singleSeat = guestsSelect.options.length <= 1;
+      guestsRow.classList.toggle("hidden", declining || singleSeat);
       dietaryRow.classList.toggle("hidden", declining);
     });
   });
+
+  // Restore a previous single reply.
+  if (ownReply) {
+    const prevRadio = form.querySelector(`input[name="attending"][value="${ownReply.attending}"]`);
+    if (prevRadio) {
+      prevRadio.checked = true;
+      prevRadio.dispatchEvent(new Event("change"));
+    }
+    if (guestsSelect && ownReply.guests) {
+      const opt = Array.from(guestsSelect.options).find((o) => o.value === String(ownReply.guests));
+      if (opt) opt.selected = true;
+    }
+    const note = document.createElement("p");
+    note.className = "party-help";
+    note.textContent = `You replied${ownReply.updated ? " on " + formatReplyDate(ownReply.updated) : ""}. Change anything below and send it again.`;
+    soloBlock.prepend(note);
+  }
 }
 
 function setStatus(message, type) {
@@ -260,9 +313,10 @@ form.addEventListener("submit", async (e) => {
     }
 
     const count = partyMode ? payload.responses.length : 1;
-    setStatus(count > 1 ? `Thank you. We have your replies for ${count} people.` : "Thank you. Your reply has been received.", "success");
+    const verb = hasReplied ? "updated" : "received";
+    setStatus(count > 1 ? `Thank you. Your replies for ${count} people have been ${verb}.` : `Thank you. Your reply has been ${verb}.`, "success");
     submitBtn.disabled = true;
-    submitBtn.textContent = "Sent";
+    submitBtn.textContent = hasReplied ? "Updated" : "Sent";
   } catch (err) {
     console.error(err);
     setStatus("Something went wrong. Please try again or reach out to Kaden or Kali.", "error");

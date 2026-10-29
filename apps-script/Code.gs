@@ -36,7 +36,10 @@ const RSVP_HEADERS = [
   "Message",
   "Party",
   "Submitted By",
+  "Last Updated",
 ];
+
+const ADDITIONAL_SUFFIX = " (additional guest)";
 
 /* ================================================================
    Entry points
@@ -113,7 +116,47 @@ function handleLookup_(body) {
     party: match.party,
     maxGuests: match.maxGuests,
     partyMembers: partyMembers,
+    replies: findReplies_(match.party, partyMembers),
   });
+}
+
+/**
+ * Latest RSVP row for each person in the party (or for the named members
+ * when there is no party). Returns [{ member, name, additional, attending,
+ * guests, email, dietary, message, updated }], one per person.
+ */
+function findReplies_(party, members) {
+  const table = getRsvpTable_();
+  const partyKey = normalizeName_(party);
+  const memberKeys = members.map((m) => normalizeName_(m));
+  const latest = {};
+
+  table.rows.forEach((row) => {
+    const rowParty = normalizeName_(row[table.col["Party"]]);
+    const rawName = String(row[table.col["Name"]] || "");
+    const additional = rawName.indexOf(ADDITIONAL_SUFFIX) !== -1;
+    const nameKey = normalizeName_(rawName.replace(ADDITIONAL_SUFFIX, ""));
+    if (!nameKey) return;
+
+    const memberIndex = memberKeys.indexOf(nameKey);
+    const inParty = partyKey ? rowParty === partyKey : memberIndex !== -1;
+    if (!inParty) return;
+
+    // Later rows win, so the last matching row is the current one.
+    latest[nameKey] = {
+      member: memberIndex !== -1 ? members[memberIndex] : null,
+      name: rawName.replace(ADDITIONAL_SUFFIX, ""),
+      additional: additional,
+      attending: String(row[table.col["Attending"]] || ""),
+      guests: String(row[table.col["Guests"]] || ""),
+      email: String(row[table.col["Email"]] || ""),
+      dietary: String(row[table.col["Dietary"]] || ""),
+      message: String(row[table.col["Message"]] || ""),
+      updated: String(row[table.col["Last Updated"]] || row[table.col["Timestamp (MT)"]] || ""),
+    };
+  });
+
+  return Object.keys(latest).map((k) => latest[k]);
 }
 
 function getGuests_() {
@@ -198,13 +241,15 @@ function squash_(s) {
    ================================================================ */
 
 /**
- * Accepts either shape:
+ * Accepts either shape and upserts one row per person: if a row already
+ * exists for that name (and party), it is overwritten and "Last Updated"
+ * set; otherwise a new row is appended.
  *
- *  Party reply (one row per person):
+ *  Party reply:
  *    { submittedBy, email, party, dietary, message,
  *      responses: [{ name, attending: "Yes"|"No", additional?: true }, ...] }
  *
- *  Single reply (legacy / fallback form):
+ *  Single reply (fallback form):
  *    { name, email, attending, guests, dietary, message, party }
  */
 function handleRsvp_(body) {
@@ -216,63 +261,96 @@ function handleRsvp_(body) {
     const dietary = String(body.dietary || "");
     const message = String(body.message || "");
     const party = String(body.party || "");
-    const timestamp = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
+    const now = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
 
-    const sheet = getRsvpSheet_();
-    ensureRsvpHeaders_(sheet);
-
-    const rows = [];
+    let people = [];
+    let submittedBy;
 
     if (Array.isArray(body.responses)) {
-      const submittedBy = String(body.submittedBy || "").trim();
-      if (!submittedBy || !email) {
-        return json_({ ok: false, error: "Missing required fields." });
-      }
+      submittedBy = String(body.submittedBy || "").trim();
+      if (!submittedBy || !email) return json_({ ok: false, error: "Missing required fields." });
       body.responses.forEach((r) => {
         const name = String((r && r.name) || "").trim();
         const attending = String((r && r.attending) || "").trim();
         if (!name || !attending) return;
-        rows.push([
-          timestamp,
-          name + (r.additional ? " (additional guest)" : ""),
-          email,
-          attending,
-          attending === "Yes" ? "1" : "0",
-          dietary,
-          message,
-          party,
-          submittedBy,
-        ]);
+        people.push({
+          name: name + (r.additional ? ADDITIONAL_SUFFIX : ""),
+          attending: attending,
+          guests: attending === "Yes" ? "1" : "0",
+        });
       });
-      if (rows.length === 0) {
-        return json_({ ok: false, error: "No responses provided." });
-      }
+      if (people.length === 0) return json_({ ok: false, error: "No responses provided." });
     } else {
       const name = String(body.name || "").trim();
       const attending = String(body.attending || "").trim();
-      if (!name || !email || !attending) {
-        return json_({ ok: false, error: "Missing required fields." });
-      }
-      rows.push([
-        timestamp,
-        name,
-        email,
-        attending,
-        String(body.guests || ""),
-        dietary,
-        message,
-        party,
-        name,
-      ]);
+      if (!name || !email || !attending) return json_({ ok: false, error: "Missing required fields." });
+      submittedBy = name;
+      people.push({ name: name, attending: attending, guests: String(body.guests || "") });
     }
 
-    const startRow = sheet.getLastRow() + 1;
-    sheet.getRange(startRow, 1, rows.length, rows[0].length).setValues(rows);
+    const table = getRsvpTable_();
+    const partyKey = normalizeName_(party);
+    let updated = 0;
+    let created = 0;
 
-    return json_({ ok: true, rows: rows.length });
+    people.forEach((p) => {
+      const nameKey = normalizeName_(p.name.replace(ADDITIONAL_SUFFIX, ""));
+
+      // Find the most recent existing row for this person.
+      let existingIndex = -1;
+      table.rows.forEach((row, i) => {
+        const rowName = normalizeName_(String(row[table.col["Name"]] || "").replace(ADDITIONAL_SUFFIX, ""));
+        const rowParty = normalizeName_(row[table.col["Party"]]);
+        if (rowName !== nameKey) return;
+        if (partyKey && rowParty && rowParty !== partyKey) return;
+        existingIndex = i;
+      });
+
+      const values = {
+        "Name": p.name,
+        "Email": email,
+        "Attending": p.attending,
+        "Guests": p.guests,
+        "Dietary": dietary,
+        "Message": message,
+        "Party": party,
+        "Submitted By": submittedBy,
+        "Last Updated": now,
+      };
+
+      if (existingIndex !== -1) {
+        const row = table.rows[existingIndex].slice();
+        Object.keys(values).forEach((h) => { row[table.col[h]] = values[h]; });
+        table.sheet.getRange(existingIndex + 2, 1, 1, row.length).setValues([row]);
+        table.rows[existingIndex] = row;
+        updated++;
+      } else {
+        const row = table.header.map(() => "");
+        row[table.col["Timestamp (MT)"]] = now;
+        Object.keys(values).forEach((h) => { row[table.col[h]] = values[h]; });
+        table.sheet.appendRow(row);
+        table.rows.push(row);
+        created++;
+      }
+    });
+
+    return json_({ ok: true, rows: people.length, updated: updated, created: created });
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
+}
+
+/** Reads the RSVPs tab into { sheet, header, col (header → index), rows }. */
+function getRsvpTable_() {
+  const sheet = getRsvpSheet_();
+  ensureRsvpHeaders_(sheet);
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  const header = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  const col = {};
+  header.forEach((h, i) => { col[h] = i; });
+  const rows = lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, lastCol).getValues() : [];
+  return { sheet: sheet, header: header, col: col, rows: rows };
 }
 
 /** Adds any RSVP header that is missing from row 1 (e.g. "Party" added later). */
