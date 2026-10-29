@@ -10,23 +10,47 @@ Google Sheet through a Google Apps Script web app.
 | File | Purpose |
 | --- | --- |
 | `index.html` | **Coming-soon page** served at the root until launch |
-| `admin/index.html` | The real site, behind a light password gate |
-| `admin/gate.js` | The gate: prompts for the password, compares a SHA-256 hash, unlocks for the session |
+| `admin/index.html` | The real site, behind the guest gate |
+| `admin/gate.js` | The gate: asks for a name, checks it with the Apps Script, unlocks for the session |
+| `config.js` | Shared config: Apps Script URL, wedding date, storage key. **Edit here.** |
 | `styles.css` | Shared styles for both pages (plain CSS, no framework) |
-| `app.js` | Menu, countdown, RSVP submission. **Config lives at the top.** |
-| `apps-script/Code.gs` | Backend that appends RSVPs to the sheet |
+| `app.js` | Menu, countdown, RSVP submission and pre-fill |
+| `apps-script/Code.gs` | Backend: RSVP writes and guest lookup |
 
 ## Site structure until launch
 
 - `kadenandkali.com/` shows the coming-soon page.
-- `kadenandkali.com/admin/` shows the in-progress site after a password.
+- `kadenandkali.com/admin/` asks for the visitor's name and shows the site if it is on the
+  guest list.
 
-The site markup lives inside an inert `<template>` in `admin/index.html`, so nothing
-renders until the password matches. The gate is client-side only. GitHub Pages serves every file publicly, so anyone who
-knows the path can read the HTML with view-source. The gate keeps out guests who stumble
-on the URL and nothing more. The password is not in the repo, only its SHA-256 hash in
-`admin/gate.js`, which also explains how to change it. Unlocking is remembered for the
-browser session via `sessionStorage`.
+### How the guest gate works
+
+1. The visitor types their name. `admin/gate.js` POSTs `{ action: "lookup", name }` to
+   the Apps Script.
+2. The script reads the **Guests** tab of the spreadsheet and answers `found: true/false`.
+   On a match it also returns the guest's display name, party name, maximum guests, and
+   the names in their party.
+3. On success the gate stores that in `sessionStorage`, stamps the site out of its inert
+   `<template>`, and loads `app.js`. The RSVP form pre-fills the name and limits the
+   guest-count dropdown to the party's maximum. The party name is saved with the RSVP.
+
+Name matching is forgiving: case, accents, punctuation, and extra spaces are ignored, and
+"Robert James Smith" matches "Robert Smith". The **Aliases** column holds comma-separated
+alternates such as nicknames or maiden names. Guest data is cached in the script for five
+minutes, so a newly added name can take up to that long to work.
+
+The guest list never enters this repo. It is still a light gate: anyone who knows an
+invitee's name gets in, and the site HTML is public to anyone who reads source.
+
+**Guests tab columns** (row 1, any order): `First Name`, `Last Name`, `Party Name`,
+`Maximum Guests`, `Aliases`. Party Name groups a household; Maximum Guests is the number
+of seats that household may RSVP for (defaults to 1 if blank).
+
+### Local development
+
+On localhost the holding page redirects to `/admin/` and the gate unlocks with no lookup.
+Add `?gate` to the admin URL (`http://localhost:8000/admin/?gate`) to exercise the gate
+locally against the live Apps Script.
 
 ### Launch day
 
@@ -34,9 +58,10 @@ browser session via `sessionStorage`.
 2. Move `admin/index.html` to `index.html`.
 3. In it: remove the `<div id="gate">` block and the `<template id="site">` and
    `</template>` lines so the site markup sits directly in `<body>`; change
-   `../styles.css?v=...` to `styles.css`; replace the `gate.js` script tag with
-   `<script src="app.js"></script>`; remove `class="locked"` on `<body>` and the
-   `noindex` meta tag; restore the description meta tag.
+   `../styles.css?v=...` to `styles.css` and `../config.js` to `config.js`; replace the
+   `gate.js` script tag with `<script src="app.js"></script>`; remove `class="locked"` on
+   `<body>` and the `noindex` meta tag; restore the description meta tag.
+   (Or keep the gate at launch: it doubles as the invitee-only front door.)
 4. Delete the `admin/` folder.
 5. Commit and push.
 
@@ -46,11 +71,9 @@ browser session via `sessionStorage`.
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000. On localhost the holding page redirects straight to
-`/admin/` and the gate unlocks without a password, so local development always shows
-the real site. The form posts to the live Apps Script endpoint, so
+Then open http://localhost:8000. See "Local development" above. The form posts to the live Apps Script endpoint, so
 local test submissions land in the real sheet. To work offline, temporarily blank out
-`CONFIG.APPS_SCRIPT_URL` in `app.js`; the form then runs in demo mode and only logs the
+`APPS_SCRIPT_URL` in `config.js`; the form then runs in demo mode and only logs the
 payload to the browser console.
 
 ## Backend (Google Sheets + Apps Script)
@@ -60,7 +83,7 @@ https://docs.google.com/spreadsheets/d/1Q3bktxJn6A5O1wqw7eosSdO0YqnIvObw6QA9-iNW
 
 The sheet has a container-bound Apps Script project (open it from the sheet via
 **Extensions → Apps Script**). That script is deployed as a web app, and its URL is
-set in `CONFIG.APPS_SCRIPT_URL` at the top of `app.js`.
+set in `APPS_SCRIPT_URL` in `config.js`.
 
 **`apps-script/Code.gs` in this repo is the source of truth for the backend code, but
 it is not deployed automatically.** Git pushes only update the static site. Any change
@@ -78,7 +101,7 @@ to the backend has to be copied into the Apps Script editor and redeployed by ha
 7. Under **Version**, choose **New version**. Optionally add a description.
 8. Click **Deploy**.
 
-The web app URL does not change when you create a new version, so `app.js` needs no
+The web app URL does not change when you create a new version, so `config.js` needs no
 edit. If you skip step 7 and just save, the live endpoint keeps running the old code.
 
 Do **not** use **Deploy → New deployment** for updates. That creates a second
@@ -103,6 +126,13 @@ curl -sL --data '{"name":"TEST - delete me","email":"test@example.com","attendin
   "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec"
 ```
 
+Guest lookup (should return `{"ok":true,"found":true,...}` for a name on the Guests tab):
+
+```bash
+curl -sL --data '{"action":"lookup","name":"Jane Doe"}' \
+  "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec"
+```
+
 Do not add `-X POST` to the curl command. Apps Script answers with a redirect, and
 forcing the method makes curl re-POST to the redirect target, which returns a Google
 "Page Not Found" HTML page. Browsers follow the redirect with GET automatically.
@@ -114,7 +144,7 @@ forcing the method makes curl re-POST to the redirect target, which returns a Go
 3. Select the `setup` function and click **Run**. Authorize when asked. This writes the
    header row.
 4. **Deploy → New deployment**, type **Web app**, Execute as **Me**, access **Anyone**.
-5. Copy the web app URL into `CONFIG.APPS_SCRIPT_URL` in `app.js`.
+5. Copy the web app URL into `APPS_SCRIPT_URL` in `config.js`.
 
 ## Hosting (GitHub Pages)
 
@@ -146,7 +176,7 @@ After this the site is served at the root of the domain, and `www` redirects to 
 ## Customizing
 
 - Names, dates, venues, and copy: `index.html`
-- Wedding date for the countdown: `CONFIG.WEDDING_DATE_ISO` in `app.js`
+- Wedding date for the countdown: `WEDDING_DATE_ISO` in `config.js`
   (set in the venue's Mountain time; `-06:00` is MDT, `-07:00` is MST)
 - Fonts: Cormorant Garamond (display) and EB Garamond (text), loaded from Google Fonts
   in `index.html`. The design follows Bliss & Bone's "Rivera" template: monochrome,

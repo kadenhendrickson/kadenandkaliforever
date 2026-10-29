@@ -516,12 +516,12 @@ body.locked { overflow: hidden; }
   line-height: 1.2;
 }
 
-.gate-form input[type="password"] {
+.gate-form input[type="text"] {
   border-bottom-color: var(--rule);
   color: var(--ink);
 }
 
-.gate-form input[type="password"]:focus { border-bottom-color: var(--ink); }
+.gate-form input[type="text"]:focus { border-bottom-color: var(--ink); }
 
 .gate-form .button:hover { background: var(--ink); color: var(--paper); }
 .gate-form .form-status { color: var(--gray); }

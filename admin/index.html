@@ -8,17 +8,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css?v=20261026b" />
+  <link rel="stylesheet" href="../styles.css?v=20261029" />
 </head>
 <body class="locked">
-  <!-- Preview gate: removed on launch day. See README. -->
+  <!-- Guest gate: removed on launch day. See README. -->
   <div id="gate" class="gate">
     <form id="gate-form" class="gate-form" novalidate>
       <p class="caps label">Kali <span class="brand-and">and</span> Kaden</p>
-      <label for="gate-password" class="gate-prompt">This page is still being written.</label>
-      <input type="password" id="gate-password" name="password" autocomplete="current-password" autofocus aria-describedby="gate-status" />
+      <label for="gate-name" class="gate-prompt">Please enter your name as it appears on your invitation.</label>
+      <input type="text" id="gate-name" name="name" autocomplete="name" autocapitalize="words" autofocus aria-describedby="gate-status" />
       <div class="form-actions">
-        <button type="submit" class="button">Enter</button>
+        <button type="submit" class="button" id="gate-submit">Continue</button>
         <p class="form-status" id="gate-status" role="status" aria-live="polite"></p>
       </div>
     </form>
@@ -213,6 +213,7 @@
 
   </template>
 
-  <script src="gate.js?v=20261026b"></script>
+  <script src="../config.js?v=20261029"></script>
+  <script src="gate.js?v=20261029"></script>
 </body>
 </html>

@@ -1,17 +1,7 @@
 /* =========================================================
-   CONFIG — edit these values
+   Configuration lives in config.js (shared with the gate).
    ========================================================= */
-const CONFIG = {
-  // Paste the "Web app" URL from your Apps Script deployment here.
-  // Leave empty to run the form in demo mode (logs to console, no network).
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec",
-
-  // Wedding date/time at the venue. Galena Lodge is in Mountain Time
-  // (America/Boise; MDT in August = UTC-6). Guests are mostly on the
-  // West Coast, but the date shown should be the venue's local date.
-  WEDDING_DATE_ISO: "2027-08-14T16:00:00-06:00",
-  TIMEZONE: "America/Boise",
-};
+const CONFIG = window.KK_CONFIG;
 
 /* =========================================================
    Full-screen menu
@@ -71,6 +61,27 @@ const statusEl = document.getElementById("form-status");
 const submitBtn = document.getElementById("submit-btn");
 const guestsRow = document.getElementById("guests-row");
 const dietaryRow = document.getElementById("dietary-row");
+const guestsSelect = document.getElementById("guests");
+
+// If the gate recognized this visitor, pre-fill their name and cap the
+// guest count at what their household was invited with.
+let recognizedGuest = null;
+try {
+  recognizedGuest = JSON.parse(sessionStorage.getItem(CONFIG.GUEST_STORAGE_KEY) || "null");
+} catch (_) {}
+
+if (recognizedGuest) {
+  const nameInput = document.getElementById("name");
+  if (nameInput && !nameInput.value) nameInput.value = recognizedGuest.name || "";
+
+  const max = Number(recognizedGuest.maxGuests);
+  if (guestsSelect && max >= 1) {
+    Array.from(guestsSelect.options).forEach((opt) => {
+      if (Number(opt.value) > max) opt.remove();
+    });
+    if (guestsSelect.options.length === 1) guestsRow.classList.add("hidden");
+  }
+}
 
 // Hide guest-count/dietary fields when declining.
 form.querySelectorAll('input[name="attending"]').forEach((radio) => {
@@ -109,6 +120,8 @@ form.addEventListener("submit", async (e) => {
     data.dietary = "";
   }
 
+  if (recognizedGuest && recognizedGuest.party) data.party = recognizedGuest.party;
+
   submitBtn.disabled = true;
   setStatus("Sending\u2026");
 
@@ -130,7 +143,7 @@ form.addEventListener("submit", async (e) => {
 
     setStatus("Thank you. Your reply has been received.", "success");
     form.reset();
-    guestsRow.classList.remove("hidden");
+    if (guestsSelect.options.length > 1) guestsRow.classList.remove("hidden");
     dietaryRow.classList.remove("hidden");
   } catch (err) {
     console.error(err);
