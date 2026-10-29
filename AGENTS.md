@@ -186,6 +186,21 @@ touching `config.js`, `CNAME`, or `apps-script/`, adding a dependency, restructu
 changing the date or venue, or doing anything in the launch-day checklist. Small content and
 styling changes do not need permission, just a pull request.
 
+## Keep this file current
+
+AGENTS.md is part of the codebase, not a one-time document. Whenever a change alters how the
+repo works, update this file in the same pull request. That includes, at minimum:
+
+- adding, removing, renaming, or moving files, or changing what a file is responsible for;
+- changing the git workflow, branch rules, or deploy process;
+- changing how the gate, RSVP form, or Apps Script backend work, or their data shapes;
+- adding or removing a dependency, tool, or external service;
+- changing a convention (cache-busting, design tokens, naming);
+- filling in a placeholder listed below.
+
+Before opening a pull request, reread the sections this change touches and fix anything that is
+no longer true. Keep the README in step too; AGENTS.md is the short version, README is the full one.
+
 ## Known placeholders still to fill in
 
 - Ceremony and reception times in `admin/index.html` are placeholders (four and six o'clock).
