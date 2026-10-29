@@ -22,8 +22,9 @@ Two people work here:
 
 ## Git workflow (mandatory)
 
-`main` is protected by a repository ruleset. Direct pushes to it are rejected for everyone,
-Kaden included, and every change must arrive by pull request. Follow these steps every time, in order.
+`main` is protected by a repository ruleset. Collaborators cannot push to it directly; every
+change must arrive by pull request. Only the repository admin (Kaden) can bypass this, and
+that exception is his alone: do not ask him to push on your behalf to skip a review. Follow these steps every time, in order.
 
 1. **Start from a fresh `main`.**
    ```bash
