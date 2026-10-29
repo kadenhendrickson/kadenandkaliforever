@@ -528,3 +528,69 @@ body.locked { overflow: hidden; }
 .gate-form .button { align-self: flex-start; }
 .gate-form .form-status { color: var(--ink-soft); line-height: 1.6; }
 .gate-form .form-status.error { color: #a33a2f; }
+
+/* ---------- RSVP: replying for a party ---------- */
+.party-help {
+  font-style: italic;
+  opacity: 0.7;
+  margin: 0 0 1rem;
+}
+
+.party-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.party-member {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--dark-rule);
+}
+
+.party-member:last-child { border-bottom: 1px solid var(--dark-rule); }
+
+@media (min-width: 560px) {
+  .party-member {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.party-name { font-style: normal; font-size: 1.125rem; }
+
+.party-name input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin: 0;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+.party-name input[type="checkbox"]::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  background: currentColor;
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+
+.party-name input[type="checkbox"]:checked::before { transform: scale(1); }
+
+.party-answer { flex-direction: row; gap: 1.5rem; }
+
+.party-member.is-off .party-answer { opacity: 0.35; pointer-events: none; }
+
+.party-extra .field { width: 100%; }
+.party-extra input::placeholder { opacity: 0.5; }

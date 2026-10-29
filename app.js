@@ -59,42 +59,141 @@ setInterval(updateCountdown, 60_000);
 const form = document.getElementById("rsvp-form");
 const statusEl = document.getElementById("form-status");
 const submitBtn = document.getElementById("submit-btn");
+const nameInput = document.getElementById("name");
+const partyBlock = document.getElementById("party-block");
+const soloBlock = document.getElementById("solo-block");
 const guestsRow = document.getElementById("guests-row");
-const dietaryRow = document.getElementById("dietary-row");
 const guestsSelect = document.getElementById("guests");
+const dietaryRow = document.getElementById("dietary-row");
 
-// If the gate recognized this visitor, pre-fill their name and cap the
-// guest count at what their household was invited with.
+// The gate stores the recognized guest (name, party, maxGuests, partyMembers).
 let recognizedGuest = null;
 try {
   recognizedGuest = JSON.parse(sessionStorage.getItem(CONFIG.GUEST_STORAGE_KEY) || "null");
 } catch (_) {}
 
-if (recognizedGuest) {
-  const nameInput = document.getElementById("name");
-  if (nameInput && !nameInput.value) nameInput.value = recognizedGuest.name || "";
+const partyMembers = (recognizedGuest && Array.isArray(recognizedGuest.partyMembers))
+  ? recognizedGuest.partyMembers.filter(Boolean)
+  : [];
+const maxGuests = recognizedGuest ? Math.max(1, Number(recognizedGuest.maxGuests) || 1) : 1;
+const extraSeats = Math.max(0, maxGuests - partyMembers.length);
+const partyMode = partyMembers.length > 1 || extraSeats > 0;
 
-  const max = Number(recognizedGuest.maxGuests);
-  if (guestsSelect && max >= 1) {
+if (recognizedGuest && nameInput && !nameInput.value) {
+  nameInput.value = recognizedGuest.name || "";
+}
+
+/* ---------- Party mode: one reply per person ---------- */
+function slug(text) {
+  return String(text).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function memberRow(name, index, checkedByDefault) {
+  const id = `m${index}-${slug(name)}`;
+  return `
+    <li class="party-member" data-member="${index}">
+      <label class="choice party-name">
+        <input type="checkbox" name="member" value="${index}" ${checkedByDefault ? "checked" : ""} />
+        <span>${name}</span>
+      </label>
+      <div class="choices party-answer">
+        <label class="choice">
+          <input type="radio" name="attending-${index}" value="Yes" />
+          <span>Accepts</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="attending-${index}" value="No" />
+          <span>Declines</span>
+        </label>
+      </div>
+    </li>`;
+}
+
+function extraRow(index) {
+  return `
+    <li class="party-member party-extra" data-extra="${index}">
+      <div class="field">
+        <label for="extra-${index}" class="caps">Additional guest</label>
+        <input type="text" id="extra-${index}" name="extra-${index}" placeholder="Full name, if bringing someone" />
+      </div>
+    </li>`;
+}
+
+if (partyMode) {
+  soloBlock.remove();
+
+  const mine = recognizedGuest.name;
+  const rows = partyMembers.map((n, i) => memberRow(n, i, n === mine)).join("");
+  const extras = Array.from({ length: extraSeats }, (_, i) => extraRow(i)).join("");
+
+  partyBlock.innerHTML = `
+    <fieldset class="field party">
+      <legend class="caps">Replying for</legend>
+      <p class="party-help">Tick everyone you are answering for, then let us know for each.</p>
+      <ul class="party-list">${rows}${extras}</ul>
+    </fieldset>`;
+  partyBlock.hidden = false;
+
+  // Only checked members need an answer.
+  function syncMember(li) {
+    const on = li.querySelector('input[name="member"]').checked;
+    li.classList.toggle("is-off", !on);
+    li.querySelectorAll('input[type="radio"]').forEach((r) => {
+      r.disabled = !on;
+      if (!on) r.checked = false;
+    });
+  }
+  partyBlock.querySelectorAll(".party-member[data-member]").forEach((li) => {
+    syncMember(li);
+    li.querySelector('input[name="member"]').addEventListener("change", () => syncMember(li));
+  });
+} else {
+  // Solo mode: hide the guest-count dropdown when the party is one.
+  if (recognizedGuest && guestsSelect) {
     Array.from(guestsSelect.options).forEach((opt) => {
-      if (Number(opt.value) > max) opt.remove();
+      if (Number(opt.value) > maxGuests) opt.remove();
     });
     if (guestsSelect.options.length === 1) guestsRow.classList.add("hidden");
   }
-}
-
-// Hide guest-count/dietary fields when declining.
-form.querySelectorAll('input[name="attending"]').forEach((radio) => {
-  radio.addEventListener("change", () => {
-    const declining = radio.value === "No" && radio.checked;
-    guestsRow.classList.toggle("hidden", declining);
-    dietaryRow.classList.toggle("hidden", declining);
+  form.querySelectorAll('input[name="attending"]').forEach((radio) => {
+    radio.required = true;
+    radio.addEventListener("change", () => {
+      const declining = radio.value === "No" && radio.checked;
+      guestsRow.classList.toggle("hidden", declining);
+      dietaryRow.classList.toggle("hidden", declining);
+    });
   });
-});
+}
 
 function setStatus(message, type) {
   statusEl.textContent = message;
   statusEl.className = "form-status" + (type ? ` ${type}` : "");
+}
+
+/* ---------- Build the payload ---------- */
+function collectParty() {
+  const responses = [];
+  let problem = null;
+
+  partyBlock.querySelectorAll(".party-member[data-member]").forEach((li) => {
+    const index = Number(li.dataset.member);
+    const on = li.querySelector('input[name="member"]').checked;
+    if (!on) return;
+    const answer = li.querySelector(`input[name="attending-${index}"]:checked`);
+    if (!answer) {
+      problem = problem || `Please let us know whether ${partyMembers[index]} accepts or declines.`;
+      return;
+    }
+    responses.push({ name: partyMembers[index], attending: answer.value });
+  });
+
+  partyBlock.querySelectorAll(".party-member[data-extra] input").forEach((input) => {
+    const name = input.value.trim();
+    if (name) responses.push({ name, attending: "Yes", additional: true });
+  });
+
+  if (!problem && responses.length === 0) problem = "Please tick at least one person to reply for.";
+  return { responses, problem };
 }
 
 form.addEventListener("submit", async (e) => {
@@ -105,50 +204,68 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  const data = Object.fromEntries(new FormData(form).entries());
+  const fields = Object.fromEntries(new FormData(form).entries());
 
   // Honeypot filled => likely a bot. Pretend success, do nothing.
-  if (data.website) {
+  if (fields.website) {
     setStatus("Thank you. Your reply has been received.", "success");
     form.reset();
     return;
   }
-  delete data.website;
 
-  if (data.attending === "No") {
-    data.guests = "0";
-    data.dietary = "";
+  let payload;
+  if (partyMode) {
+    const { responses, problem } = collectParty();
+    if (problem) {
+      setStatus(problem, "error");
+      return;
+    }
+    payload = {
+      action: "rsvp",
+      submittedBy: fields.name,
+      email: fields.email,
+      party: recognizedGuest.party || "",
+      dietary: fields.dietary || "",
+      message: fields.message || "",
+      responses,
+    };
+  } else {
+    payload = {
+      action: "rsvp",
+      name: fields.name,
+      email: fields.email,
+      attending: fields.attending,
+      guests: fields.attending === "No" ? "0" : (fields.guests || "1"),
+      dietary: fields.attending === "No" ? "" : (fields.dietary || ""),
+      message: fields.message || "",
+      party: (recognizedGuest && recognizedGuest.party) || "",
+    };
   }
 
-  if (recognizedGuest && recognizedGuest.party) data.party = recognizedGuest.party;
-
   submitBtn.disabled = true;
-  setStatus("Sending\u2026");
+  setStatus("Sending…");
 
   try {
     if (!CONFIG.APPS_SCRIPT_URL) {
-      // Demo mode: no backend configured yet.
-      console.info("[demo] RSVP payload:", data);
+      console.info("[demo] RSVP payload:", payload);
       await new Promise((r) => setTimeout(r, 600));
     } else {
       // A string body is sent as text/plain, which avoids a CORS preflight.
-      // Apps Script web apps accept this and return a readable JSON response.
       const res = await fetch(CONFIG.APPS_SCRIPT_URL, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (!json.ok) throw new Error(json.error || "Unknown error");
     }
 
-    setStatus("Thank you. Your reply has been received.", "success");
-    form.reset();
-    if (guestsSelect.options.length > 1) guestsRow.classList.remove("hidden");
-    dietaryRow.classList.remove("hidden");
+    const count = partyMode ? payload.responses.length : 1;
+    setStatus(count > 1 ? `Thank you. We have your replies for ${count} people.` : "Thank you. Your reply has been received.", "success");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sent";
   } catch (err) {
     console.error(err);
-    setStatus("Something went wrong. Please try again or email us directly.", "error");
-  } finally {
+    setStatus("Something went wrong. Please try again or reach out to Kaden or Kali.", "error");
     submitBtn.disabled = false;
   }
 });

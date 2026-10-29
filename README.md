@@ -31,8 +31,23 @@ Google Sheet through a Google Apps Script web app.
    On a match it also returns the guest's display name, party name, maximum guests, and
    the names in their party.
 3. On success the gate stores that in `sessionStorage`, stamps the site out of its inert
-   `<template>`, and loads `app.js`. The RSVP form pre-fills the name and limits the
-   guest-count dropdown to the party's maximum. The party name is saved with the RSVP.
+   `<template>`, and loads `app.js`.
+
+### Replying for a party
+
+When the recognized guest's party has more than one person (or their Maximum Guests is
+larger than the party), the RSVP form switches to party mode:
+
+- Every party member is listed with a checkbox and an Accepts / Declines choice. The
+  person replying is ticked by default. Untick anyone you are not answering for.
+- If Maximum Guests exceeds the number of named members, blank "Additional guest" fields
+  appear for plus-ones. A name typed there counts as accepting.
+- One submission writes **one row per person** to the RSVPs tab, each with the same
+  email, dietary note, message, party, and a **Submitted By** column naming who replied.
+  Additional guests are suffixed "(additional guest)".
+
+A single-person party, or an unrecognized visitor (for example on localhost), gets the
+simple form: one name, accept/decline, and a guest-count dropdown.
 
 Name matching is forgiving: case, accents, punctuation, and extra spaces are ignored, and
 "Robert James Smith" matches "Robert Smith". The **Aliases** column holds comma-separated
@@ -44,7 +59,8 @@ invitee's name gets in, and the site HTML is public to anyone who reads source.
 
 **Guests tab columns** (row 1, any order): `First Name`, `Last Name`, `Party Name`,
 `Maximum Guests`, `Aliases`. Party Name groups a household; Maximum Guests is the number
-of seats that household may RSVP for (defaults to 1 if blank).
+of seats that household may RSVP for (defaults to 1 if blank). Set it higher than the
+number of named members to allow plus-ones.
 
 ### Local development
 
@@ -130,6 +146,13 @@ Guest lookup (should return `{"ok":true,"found":true,...}` for a name on the Gue
 
 ```bash
 curl -sL --data '{"action":"lookup","name":"Jane Doe"}' \
+  "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec"
+```
+
+Submit a party reply (one row per response):
+
+```bash
+curl -sL --data '{"submittedBy":"TEST A","email":"test@example.com","party":"Test Party","responses":[{"name":"TEST A","attending":"Yes"},{"name":"TEST B","attending":"No"}]}' \
   "https://script.google.com/macros/s/AKfycbwpsnPv-xVrRwvC_Z9_KgOBtrAjKzwmesN987-BMkcUbX0TKL1TXkYYiooCM8bxWSFKwA/exec"
 ```
 

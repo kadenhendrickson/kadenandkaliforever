@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css?v=20261029b" />
+  <link rel="stylesheet" href="../styles.css?v=20261029c" />
 </head>
 <body class="locked">
   <!-- Guest gate: removed on launch day. See README. -->
@@ -149,7 +149,7 @@
 
         <form id="rsvp-form" class="form" novalidate>
           <div class="field">
-            <label for="name" class="caps">Full name</label>
+            <label for="name" class="caps">Your name</label>
             <input type="text" id="name" name="name" autocomplete="name" required />
           </div>
 
@@ -158,33 +158,39 @@
             <input type="email" id="email" name="email" autocomplete="email" required />
           </div>
 
-          <fieldset class="field">
-            <legend class="caps">Will you attend</legend>
-            <div class="choices">
-              <label class="choice">
-                <input type="radio" name="attending" value="Yes" required />
-                <span>Joyfully accepts</span>
-              </label>
-              <label class="choice">
-                <input type="radio" name="attending" value="No" />
-                <span>Regretfully declines</span>
-              </label>
-            </div>
-          </fieldset>
+          <!-- Filled by app.js when the gate recognized a party of more than one. -->
+          <div id="party-block" class="party-block" hidden></div>
 
-          <div class="field" id="guests-row">
-            <label for="guests" class="caps">Guests in your party</label>
-            <select id="guests" name="guests">
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-              <option value="4">Four</option>
-            </select>
+          <!-- Fallback for a single guest or an unrecognized visitor. -->
+          <div id="solo-block" class="solo-block">
+            <fieldset class="field">
+              <legend class="caps">Will you attend</legend>
+              <div class="choices">
+                <label class="choice">
+                  <input type="radio" name="attending" value="Yes" />
+                  <span>Joyfully accepts</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="attending" value="No" />
+                  <span>Regretfully declines</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field" id="guests-row">
+              <label for="guests" class="caps">Guests in your party</label>
+              <select id="guests" name="guests">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+              </select>
+            </div>
           </div>
 
           <div class="field" id="dietary-row">
             <label for="dietary" class="caps">Dietary restrictions</label>
-            <input type="text" id="dietary" name="dietary" />
+            <input type="text" id="dietary" name="dietary" placeholder="Please note who, if replying for others" />
           </div>
 
           <div class="field">
@@ -213,7 +219,7 @@
 
   </template>
 
-  <script src="../config.js?v=20261029b"></script>
-  <script src="gate.js?v=20261029b"></script>
+  <script src="../config.js?v=20261029c"></script>
+  <script src="gate.js?v=20261029c"></script>
 </body>
 </html>

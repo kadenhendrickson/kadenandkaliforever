@@ -2,7 +2,8 @@
  * Wedding backend — Google Apps Script
  *
  * Two jobs:
- *   1. RSVP submissions  → appended to the "RSVPs" tab.
+ *   1. RSVP submissions  → appended to the "RSVPs" tab, one row per person.
+ *                          A guest may reply for their whole party in one go.
  *   2. Guest lookup      → checks a typed name against the "Guests" tab so the
  *                          site can let invitees in without a password.
  *
@@ -34,6 +35,7 @@ const RSVP_HEADERS = [
   "Dietary",
   "Message",
   "Party",
+  "Submitted By",
 ];
 
 /* ================================================================
@@ -195,36 +197,79 @@ function squash_(s) {
    RSVP
    ================================================================ */
 
+/**
+ * Accepts either shape:
+ *
+ *  Party reply (one row per person):
+ *    { submittedBy, email, party, dietary, message,
+ *      responses: [{ name, attending: "Yes"|"No", additional?: true }, ...] }
+ *
+ *  Single reply (legacy / fallback form):
+ *    { name, email, attending, guests, dietary, message, party }
+ */
 function handleRsvp_(body) {
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(10000);
 
-    const name = String(body.name || "").trim();
     const email = String(body.email || "").trim();
-    const attending = String(body.attending || "").trim();
-
-    if (!name || !email || !attending) {
-      return json_({ ok: false, error: "Missing required fields." });
-    }
+    const dietary = String(body.dietary || "");
+    const message = String(body.message || "");
+    const party = String(body.party || "");
+    const timestamp = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
 
     const sheet = getRsvpSheet_();
     ensureRsvpHeaders_(sheet);
 
-    const timestamp = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
+    const rows = [];
 
-    sheet.appendRow([
-      timestamp,
-      name,
-      email,
-      attending,
-      String(body.guests || ""),
-      String(body.dietary || ""),
-      String(body.message || ""),
-      String(body.party || ""),
-    ]);
+    if (Array.isArray(body.responses)) {
+      const submittedBy = String(body.submittedBy || "").trim();
+      if (!submittedBy || !email) {
+        return json_({ ok: false, error: "Missing required fields." });
+      }
+      body.responses.forEach((r) => {
+        const name = String((r && r.name) || "").trim();
+        const attending = String((r && r.attending) || "").trim();
+        if (!name || !attending) return;
+        rows.push([
+          timestamp,
+          name + (r.additional ? " (additional guest)" : ""),
+          email,
+          attending,
+          attending === "Yes" ? "1" : "0",
+          dietary,
+          message,
+          party,
+          submittedBy,
+        ]);
+      });
+      if (rows.length === 0) {
+        return json_({ ok: false, error: "No responses provided." });
+      }
+    } else {
+      const name = String(body.name || "").trim();
+      const attending = String(body.attending || "").trim();
+      if (!name || !email || !attending) {
+        return json_({ ok: false, error: "Missing required fields." });
+      }
+      rows.push([
+        timestamp,
+        name,
+        email,
+        attending,
+        String(body.guests || ""),
+        dietary,
+        message,
+        party,
+        name,
+      ]);
+    }
 
-    return json_({ ok: true });
+    const startRow = sheet.getLastRow() + 1;
+    sheet.getRange(startRow, 1, rows.length, rows[0].length).setValues(rows);
+
+    return json_({ ok: true, rows: rows.length });
   } finally {
     try { lock.releaseLock(); } catch (_) {}
   }
