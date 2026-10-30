@@ -206,6 +206,19 @@ repo works, update this file in the same pull request. That includes, at minimum
 Before opening a pull request, reread the sections this change touches and fix anything that is
 no longer true. Keep the README in step too; AGENTS.md is the short version, README is the full one.
 
+**The gate has a loading state and a welcome card.** While a name is being checked, the
+Continue button hides and a pulsing `<3` cycles through short playful lines (the
+`LOADING_LINES` array in `admin/gate.js`). After a successful check, a one-per-session welcome
+card greets the guest by first name (`showWelcome` in `gate.js`, styles under "Welcome card" in
+`styles.css`). Both live in `gate.js` so every gated page gets them.
+
+**The main page header starts with class `over-hero` in the markup** so it is transparent over
+the photo from the first paint; `app.js` only toggles it on scroll. Sub-pages have no hero and
+omit the class. Do not remove it or the header flashes white on load.
+
+**`[hidden]` always wins.** A global rule makes the `hidden` attribute beat any `display`
+value, so prefer `el.hidden = true/false` over class toggles for show/hide.
+
 **Sub-pages share the gate and live in folders.** A page is `admin/<name>/index.html`, so its URL
 is `/admin/<name>/` with no `.html`. Any new page must copy the structure of
 `admin/details/index.html`: the same `<div id="gate">`, its content inside `<template id="site">`,

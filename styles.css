@@ -29,6 +29,8 @@
 
 html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
 
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   background: var(--paper);
@@ -706,3 +708,99 @@ body.locked { overflow: hidden; }
 
 .back-link { color: var(--gray); }
 .back-link:hover { color: var(--ink); }
+
+/* ---------- Gate loading state ---------- */
+.gate-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  color: var(--ink-soft);
+}
+
+.heartbeat {
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--gray);
+  display: inline-block;
+  animation: heartbeat 1.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  14%       { transform: scale(1.18); opacity: 1; }
+  28%       { transform: scale(1); opacity: 0.85; }
+  42%       { transform: scale(1.12); opacity: 1; }
+}
+
+.gate-loading-text {
+  font-style: italic;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gate-loading-text.is-in { opacity: 1; transform: none; }
+
+/* ---------- Welcome card ---------- */
+body.welcome-open { overflow: hidden; }
+
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+}
+
+.welcome-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 24, 25, 0.55);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.welcome-card {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  background: var(--paper-warm);
+  border: 1px solid var(--rule);
+  padding: clamp(2rem, 5vw, 3rem);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.welcome.is-open .welcome-backdrop { opacity: 1; }
+.welcome.is-open .welcome-card { opacity: 1; transform: none; }
+.welcome.is-leaving .welcome-backdrop,
+.welcome.is-leaving .welcome-card { opacity: 0; }
+
+.welcome-card .label { margin-bottom: 1.25rem; }
+.welcome-card .display { margin-bottom: 1rem; }
+
+.welcome-text {
+  color: var(--ink-soft);
+  max-width: 22rem;
+  margin: 0 auto;
+}
+
+.welcome-heart {
+  margin: 1.25rem 0 1.5rem;
+  font-family: var(--serif-display);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--gray);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heartbeat { animation: none; }
+}
