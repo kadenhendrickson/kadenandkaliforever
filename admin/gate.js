@@ -15,7 +15,7 @@
    ========================================================= */
 (() => {
   const CONFIG = window.KK_CONFIG;
-  const APP_SCRIPT = "/app.js?v=20261030a";
+  const APP_SCRIPT = "/app.js?v=20261030c";
   const UNLOCK_KEY = "kk-preview-unlocked";
 
   const gate = document.getElementById("gate");
@@ -92,7 +92,7 @@
           We love you, and we are so excited for you${others ? " and yours" : ""} to join us
           in the mountains next August. Thank you for being part of our story.
         </p>
-        <p class="welcome-heart" aria-hidden="true">&lt;3</p>
+        <p class="welcome-heart" aria-hidden="true">&#9825;</p>
         <button type="button" class="button button-ink" id="welcome-close">Can’t wait</button>
       </div>`;
     document.body.appendChild(wrap);
