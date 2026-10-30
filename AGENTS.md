@@ -109,7 +109,8 @@ back so returning guests see and can update their answers.
 Otherwise guests may see stale files.
 
 **Localhost behaves differently on purpose.** On `localhost` the holding page redirects to
-`/admin/` and the gate unlocks with no name lookup, so you always see the real site. To test the
+`/admin/` and the gate unlocks with no name lookup, so you always see the real site. To view
+the holding page locally, open `http://localhost:8000/?stay`. To test the
 gate itself locally, open `http://localhost:8000/admin/?gate`.
 
 **The RSVP form (`admin/rsvp/index.html`) writes to the real spreadsheet, even from localhost.** Do not submit the form
