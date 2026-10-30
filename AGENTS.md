@@ -132,7 +132,9 @@ The look is modeled on Bliss & Bone's "Rivera" template: classic, quiet, editori
 - **Generous space.** Sections breathe. Hairline rules separate things. When in doubt, remove
   rather than add.
 - **Photos render in black and white automatically** (a CSS filter). Replace a
-  `.photo-placeholder` div with an `<img>` tag; keep the surrounding `<figure>`.
+  `.photo-placeholder` div with an `<img>` tag; keep the surrounding `<figure>`. The hero
+  photo is `assets/hero.jpg` plus `assets/hero-small.jpg` for phones; the header sits
+  transparently over it and turns solid on scroll (`.over-hero` toggled in `app.js`).
 - **No frameworks, no npm, no build tools.** Plain HTML, CSS, and JavaScript. Do not add
   dependencies.
 - **Mobile first.** Most guests will open this on a phone. Check layouts at roughly 375px wide.
@@ -206,4 +208,4 @@ no longer true. Keep the README in step too; AGENTS.md is the short version, REA
 - Ceremony and reception times in `admin/index.html` are placeholders (four and six o'clock).
 - The Galena Lodge street address should be verified.
 - "Our Story" and "Travel & Stay" are placeholder paragraphs.
-- Both photo slots are placeholders.
+- The second photo slot (between Travel and RSVP) is a placeholder. The hero photo is in place.
