@@ -204,6 +204,11 @@ no longer true. Keep the README in step too; AGENTS.md is the short version, REA
 ## Known placeholders still to fill in
 
 - Ceremony and reception times in `admin/index.html` are placeholders (four and six o'clock).
+- The whole **Welcome Party** section in `admin/index.html` is placeholder text: time, venue,
+  street address, and the description. The date is assumed to be Friday, August 13, 2027, the
+  evening before the wedding; confirm it. The section deliberately carries no attire or arrival
+  notes. The welcome party is not part of the RSVP form, so there is currently no way for a
+  guest to reply to it.
 - The Galena Lodge street address should be verified.
 - "Our Story" and "Travel & Stay" are placeholder paragraphs.
 - Both photo slots are placeholders.
