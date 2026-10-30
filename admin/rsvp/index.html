@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wedding Details &middot; Kaden &amp; Kali</title>
+  <title>RSVP &middot; Kaden &amp; Kali</title>
   <meta name="robots" content="noindex, nofollow" />
   <!-- Icons -->
   <link rel="icon" href="/assets/favicon.ico" sizes="any" />
@@ -18,7 +18,7 @@
   <meta property="og:site_name" content="Kaden &amp; Kali" />
   <meta property="og:title" content="Kaden &amp; Kali" />
   <meta property="og:description" content="August 14, 2027 &middot; Galena Lodge, Sun Valley, Idaho" />
-  <meta property="og:url" content="https://kadenandkali.com/admin/details.html" />
+  <meta property="og:url" content="https://kadenandkali.com/admin/rsvp/" />
   <meta property="og:image" content="https://kadenandkali.com/assets/og-image.png" />
   <meta property="og:image:secure_url" content="https://kadenandkali.com/assets/og-image.png" />
   <meta property="og:image:type" content="image/png" />
@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css?v=20261029i" />
+  <link rel="stylesheet" href="/styles.css?v=20261029j" />
 </head>
 <body class="locked">
   <!-- Guest gate: same as index.html. A visitor who unlocked the main page is already through. -->
@@ -51,7 +51,7 @@
 
   <template id="site">
   <header class="site-header">
-    <a href="index.html" class="brand">Kaden <span class="brand-and">and</span> Kali</a>
+    <a href="../" class="brand">Kaden <span class="brand-and">and</span> Kali</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
     </button>
@@ -59,9 +59,9 @@
 
   <nav id="menu" class="menu" aria-hidden="true">
     <ul class="menu-list">
-      <li><a href="index.html#story">Our Story</a></li>
-      <li><a href="index.html#dates">Save the Date</a></li>
-      <li><a href="index.html#travel">Travel</a></li>
+      <li><a href="../#story">Our Story</a></li>
+      <li><a href="../#dates">Save the Date</a></li>
+      <li><a href="../#travel">Travel</a></li>
     </ul>
     <p class="menu-foot">August 14, 2027 &middot; Sun Valley, Idaho</p>
   </nav>
@@ -69,49 +69,76 @@
   <main id="top" class="subpage">
     <section class="section section-first">
       <div class="section-inner narrow">
-        <p class="caps label"><a href="index.html#dates" class="back-link">&larr; Back</a></p>
-        <h1 class="display display-lg">Wedding details</h1>
-        <p class="lede">
-          Placeholder. This page will hold the full day-of information: the schedule, attire,
-          getting there and parking, where to stay, and anything else guests will want closer
-          to the date.
-        </p>
+        <p class="caps label"><a href="../" class="back-link">&larr; Back</a></p>
+        <h1 class="display display-lg">RSVP</h1>
+        <p class="lede">Kindly reply by the first of May.</p>
       </div>
     </section>
 
-    <hr class="rule" />
-
-    <section id="schedule" class="section">
+    <section id="rsvp" class="section section-dark">
       <div class="section-inner narrow">
-        <p class="caps label">Schedule</p>
-        <h2 class="display">Saturday, August 14</h2>
-        <p class="caps">Four o&rsquo;clock &middot; Ceremony</p>
-        <p class="caps">Six o&rsquo;clock &middot; Reception</p>
-        <p class="detail">Placeholder for the order of the day.</p>
-      </div>
-    </section>
+        <form id="rsvp-form" class="form" novalidate>
+          <div class="field">
+            <label for="name" class="caps">Your name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required />
+          </div>
 
-    <hr class="rule" />
+          <div class="field">
+            <label for="email" class="caps">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
 
-    <section id="attire" class="section">
-      <div class="section-inner narrow">
-        <p class="caps label">Attire</p>
-        <h2 class="display">What to wear</h2>
-        <p class="detail">Cocktail attire. The ceremony is outdoors at 7,300 feet, so bring a layer for the evening.</p>
-      </div>
-    </section>
+          <!-- Filled by app.js when the gate recognized a party of more than one. -->
+          <div id="party-block" class="party-block" hidden></div>
 
-    <hr class="rule" />
+          <!-- Fallback for a single guest or an unrecognized visitor. -->
+          <div id="solo-block" class="solo-block">
+            <fieldset class="field">
+              <legend class="caps">Will you attend</legend>
+              <div class="choices">
+                <label class="choice">
+                  <input type="radio" name="attending" value="Yes" />
+                  <span>Joyfully accepts</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="attending" value="No" />
+                  <span>Regretfully declines</span>
+                </label>
+              </div>
+            </fieldset>
 
-    <section id="parking" class="section">
-      <div class="section-inner narrow">
-        <p class="caps label">Getting there &amp; parking</p>
-        <h2 class="display">Galena Lodge</h2>
-        <p class="detail">
-          15187 Highway 75<br />
-          Ketchum, Idaho 83340
-        </p>
-        <p class="detail">Placeholder for parking and arrival instructions.</p>
+            <div class="field" id="guests-row">
+              <label for="guests" class="caps">Guests in your party</label>
+              <select id="guests" name="guests">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" id="dietary-row">
+            <label for="dietary" class="caps">Dietary restrictions</label>
+            <input type="text" id="dietary" name="dietary" placeholder="Please note who, if replying for others" />
+          </div>
+
+          <div class="field">
+            <label for="message" class="caps">A note for the couple</label>
+            <textarea id="message" name="message" rows="2"></textarea>
+          </div>
+
+          <!-- Honeypot: hidden from humans, bots tend to fill it -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="button" id="submit-btn">Send reply</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
       </div>
     </section>
   </main>
@@ -121,7 +148,7 @@
   </footer>
   </template>
 
-  <script src="../config.js?v=20261029i"></script>
-  <script src="gate.js?v=20261029i"></script>
+  <script src="/config.js?v=20261029j"></script>
+  <script src="/admin/gate.js?v=20261029j"></script>
 </body>
 </html>

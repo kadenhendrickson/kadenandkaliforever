@@ -11,8 +11,8 @@ Google Sheet through a Google Apps Script web app.
 | --- | --- |
 | `index.html` | **Coming-soon page** served at the root until launch |
 | `admin/index.html` | The real site, behind the guest gate |
-| `admin/details.html` | Gated sub-page for day-of details (schedule, attire, parking). Placeholder content. **Not linked yet.** |
-| `admin/rsvp.html` | Gated sub-page holding the RSVP form. **Not linked from the main page yet.** |
+| `admin/details/index.html` | Gated sub-page for day-of details (schedule, attire, parking). Placeholder content. **Not linked yet.** |
+| `admin/rsvp/index.html` | Gated sub-page holding the RSVP form. **Not linked from the main page yet.** |
 | `admin/gate.js` | The gate: asks for a name, checks it with the Apps Script, unlocks for the session |
 | `config.js` | Shared config: Apps Script URL, wedding date, storage key. **Edit here.** |
 | `styles.css` | Shared styles for both pages (plain CSS, no framework) |
@@ -93,35 +93,33 @@ locally against the live Apps Script.
 ### Launch day
 
 1. Delete the root `index.html` (the coming-soon page).
-2. Move `admin/index.html` to `index.html`.
-3. In it: remove the `<div id="gate">` block and the `<template id="site">` and
-   `</template>` lines so the site markup sits directly in `<body>`; change
-   `../styles.css?v=...` to `styles.css` and `../config.js` to `config.js`; replace the
-   `gate.js` script tag with `<script src="app.js"></script>`; remove `class="locked"` on
-   `<body>` and the `noindex` meta tag; restore the description meta tag.
-   (Or keep the gate at launch: it doubles as the invitee-only front door.)
-4. Move `admin/details.html` and `admin/rsvp.html` to the root and apply the same edits to
-   them (their links already point at `index.html`, which still works from the root).
-5. Delete the `admin/` folder.
-6. Commit and push.
+2. Move `admin/index.html` to `index.html`, and `admin/details/` and `admin/rsvp/` to the
+   root (`details/`, `rsvp/`). Asset paths are root-absolute and page links are relative, so
+   nothing inside them needs to change.
+3. In each page: remove the `<div id="gate">` block and the `<template id="site">` /
+   `</template>` lines so the markup sits directly in `<body>`; replace the
+   `/admin/gate.js` script tag with `<script src="/app.js?v=..."></script>`; remove
+   `class="locked"` on `<body>` and the `noindex` meta tag; restore a description meta tag.
+4. Delete the `admin/` folder.
+5. Commit and push.
 
 ## Main page scope (save-the-date)
 
 Until invitations go out, `admin/index.html` carries only save-the-date content: the hero,
 Our Story, a **Save the Date** section with two columns (the Welcome Picnic on Friday and the
 Wedding on Saturday), and Travel & Stay. Day-of detail (attire, parking, schedule) lives on
-`admin/details.html`, and the form on `admin/rsvp.html`; neither is linked from the main page
+`admin/details/`, and the form on `admin/rsvp/`; neither is linked from the main page
 or menus yet. To surface the details page later, add an outlined button
-(`<a href="details.html" class="button button-ink">`) in the Save the Date section.
+(`<a href="details/" class="button button-ink">`) in the Save the Date section.
 
 ## RSVP page
 
-The RSVP form lives on `admin/rsvp.html` (same gate as the main page). While save-the-dates
+The RSVP form lives on `admin/rsvp/` (same gate as the main page). While save-the-dates
 are going out it is deliberately **not linked** from the main page or the menu, so guests do
-not see it; it is reachable directly at `/admin/rsvp.html` for testing. When invitations go
+not see it; it is reachable directly at `/admin/rsvp/` for testing. When invitations go
 out, add a button to the main page (for example an outlined `.button.button-ink` linking to
-`rsvp.html`, like the "Wedding details" button) and restore `<li><a href="rsvp.html">RSVP</a></li>`
-in the menus of `admin/index.html` and `admin/details.html`.
+`rsvp.html`, like the "Wedding details" button) and restore `<li><a href="rsvp/">RSVP</a></li>`
+in the menus of `admin/index.html` and `admin/details/`.
 
 ## Local preview
 
