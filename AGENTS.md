@@ -80,6 +80,7 @@ Never do any of the following: `git push --force`, rewriting history, committing
 | `assets/` | Favicons, home-screen icon, link-preview image. | Only if asked |
 | `CNAME` | Binds the custom domain. | **Never** |
 | `README.md` | Full technical documentation. | Keep in sync |
+| `IDEAS.md` | Parking lot for future ideas. Add dated entries; build from a pull request. | Yes |
 | `.claude/launch.json` | Local preview server config for the Claude desktop app. | No |
 
 ## Things that are not obvious from the code
