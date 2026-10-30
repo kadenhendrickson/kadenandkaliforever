@@ -15,6 +15,7 @@ function setMenu(open) {
   menuToggle.setAttribute("aria-expanded", String(open));
   menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
   document.body.classList.toggle("menu-open", open);
+  if (header) header.classList.toggle("menu-is-open", open);
 }
 
 menuToggle.addEventListener("click", () => setMenu(!menu.classList.contains("open")));
@@ -32,13 +33,29 @@ document.addEventListener("keydown", (e) => {
    ========================================================= */
 const weddingDate = new Date(CONFIG.WEDDING_DATE_ISO);
 
-document.getElementById("hero-date").textContent = weddingDate.toLocaleDateString("en-US", {
+// The hero shows the date as "08 . 14 . 27"; keep the full date in a tooltip.
+document.getElementById("hero-date").title = weddingDate.toLocaleDateString("en-US", {
   weekday: "long",
   year: "numeric",
   month: "long",
   day: "numeric",
   timeZone: CONFIG.TIMEZONE,
 });
+
+/* =========================================================
+   Header: transparent over the photo hero, solid after scrolling
+   ========================================================= */
+const header = document.querySelector(".site-header");
+const hero = document.querySelector(".hero-photo");
+if (header && hero) {
+  const update = () => {
+    const past = window.scrollY > hero.offsetHeight - header.offsetHeight;
+    header.classList.toggle("over-hero", !past);
+  };
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+}
 
 function updateCountdown() {
   const el = document.getElementById("countdown");

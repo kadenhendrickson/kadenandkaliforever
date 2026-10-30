@@ -235,6 +235,10 @@ query string (e.g. `?v=2`) to force a fresh preview, or keep the filename versio
 - Fonts: Cormorant Garamond (display) and EB Garamond (text), loaded from Google Fonts
   in `index.html`. The design follows Bliss & Bone's "Rivera" template: monochrome,
   one serif family, hairline rules, full-screen menu, black-and-white photography.
-- Photos: replace the `.photo-placeholder` divs in `index.html` with `<img>` tags. The
-  CSS renders them in grayscale automatically.
+- Hero photo: `assets/hero.jpg` (desktop) and `assets/hero-small.jpg` (phones, via a
+  `<picture>` source). Replace both to change it; keep the photo black and white, landscape,
+  with the subjects roughly centered. The header is transparent over the hero and turns solid
+  once you scroll past it.
+- Other photos: replace the remaining `.photo-placeholder` div in `admin/index.html` with an
+  `<img>` tag. The CSS renders it in grayscale automatically.
 - Colors and fonts: the `:root` tokens at the top of `styles.css`

@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../styles.css?v=20261029d" />
+  <link rel="stylesheet" href="../styles.css?v=20261029e" />
 </head>
 <body class="locked">
   <!-- Guest gate: removed on launch day. See README. -->
@@ -70,29 +70,23 @@
 
   <main id="top">
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero hero-photo">
+      <picture class="hero-media">
+        <source media="(max-width: 700px)" srcset="../assets/hero-small.jpg" />
+        <img src="../assets/hero.jpg" alt="Kali and Kaden walking hand in hand through a mountain meadow" fetchpriority="high" />
+      </picture>
+      <div class="hero-scrim" aria-hidden="true"></div>
       <div class="hero-inner">
-        <h1 class="names">
-          <span class="name">Kali</span>
-          <span class="and">and</span>
-          <span class="name">Kaden</span>
-        </h1>
-        <div class="hero-meta">
-          <p class="caps" id="hero-date">Saturday, August 14, 2027</p>
-          <p class="caps">Galena Lodge &middot; Sun Valley, Idaho</p>
-          <p class="hero-countdown" id="countdown" aria-live="polite"></p>
-        </div>
+        <p class="caps hero-eyebrow">We&rsquo;re getting married</p>
+        <h1 class="hero-names">Kali <span class="amp">&amp;</span> Kaden</h1>
+        <p class="caps hero-date" id="hero-date">08 . 14 . 27</p>
+        <p class="caps hero-place">Galena Lodge &middot; Sun Valley, Idaho</p>
+        <p class="hero-countdown" id="countdown" aria-live="polite"></p>
       </div>
       <a href="#story" class="scroll-cue" aria-label="Scroll to content">
         <span class="caps">Scroll</span>
       </a>
     </section>
-
-    <!-- Photo -->
-    <figure class="photo photo-full" role="img" aria-label="Photo of Kali and Kaden">
-      <!-- Replace the div below with <img src="images/hero.jpg" alt=""> -->
-      <div class="photo-placeholder"><span class="caps">Photograph</span></div>
-    </figure>
 
     <!-- Our Story -->
     <section id="story" class="section">
@@ -244,7 +238,7 @@
 
   </template>
 
-  <script src="../config.js?v=20261029d"></script>
-  <script src="gate.js?v=20261029d"></script>
+  <script src="../config.js?v=20261029e"></script>
+  <script src="gate.js?v=20261029e"></script>
 </body>
 </html>
