@@ -12,6 +12,7 @@ Google Sheet through a Google Apps Script web app.
 | `index.html` | **Coming-soon page** served at the root until launch |
 | `admin/index.html` | The real site, behind the guest gate |
 | `admin/details.html` | Gated sub-page for day-of details (schedule, attire, parking). Placeholder content. |
+| `admin/rsvp.html` | Gated sub-page holding the RSVP form. **Not linked from the main page yet.** |
 | `admin/gate.js` | The gate: asks for a name, checks it with the Apps Script, unlocks for the session |
 | `config.js` | Shared config: Apps Script URL, wedding date, storage key. **Edit here.** |
 | `styles.css` | Shared styles for both pages (plain CSS, no framework) |
@@ -99,10 +100,19 @@ locally against the live Apps Script.
    `gate.js` script tag with `<script src="app.js"></script>`; remove `class="locked"` on
    `<body>` and the `noindex` meta tag; restore the description meta tag.
    (Or keep the gate at launch: it doubles as the invitee-only front door.)
-4. Move `admin/details.html` to `details.html` and apply the same edits to it (its links
-   already point at `index.html`, which still works from the root).
+4. Move `admin/details.html` and `admin/rsvp.html` to the root and apply the same edits to
+   them (their links already point at `index.html`, which still works from the root).
 5. Delete the `admin/` folder.
 6. Commit and push.
+
+## RSVP page
+
+The RSVP form lives on `admin/rsvp.html` (same gate as the main page). While save-the-dates
+are going out it is deliberately **not linked** from the main page or the menu, so guests do
+not see it; it is reachable directly at `/admin/rsvp.html` for testing. When invitations go
+out, add a button to the main page (for example an outlined `.button.button-ink` linking to
+`rsvp.html`, like the "Wedding details" button) and restore `<li><a href="rsvp.html">RSVP</a></li>`
+in the menus of `admin/index.html` and `admin/details.html`.
 
 ## Local preview
 

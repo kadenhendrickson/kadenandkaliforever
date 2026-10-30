@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP &middot; Kaden &amp; Kali</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- Icons -->
+  <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <meta name="theme-color" content="#f7f5f1" />
+  <meta name="apple-mobile-web-app-title" content="Kaden &amp; Kali" />
+
+  <!-- Link previews (iMessage, Slack, Facebook, Twitter) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Kaden &amp; Kali" />
+  <meta property="og:title" content="Kaden &amp; Kali" />
+  <meta property="og:description" content="August 14, 2027 &middot; Galena Lodge, Sun Valley, Idaho" />
+  <meta property="og:url" content="https://kadenandkali.com/admin/rsvp.html" />
+  <meta property="og:image" content="https://kadenandkali.com/assets/og-image.png" />
+  <meta property="og:image:secure_url" content="https://kadenandkali.com/assets/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Kaden and Kali. August 14, 2027. Sun Valley, Idaho." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Kaden &amp; Kali" />
+  <meta name="twitter:description" content="August 14, 2027 &middot; Galena Lodge, Sun Valley, Idaho" />
+  <meta name="twitter:image" content="https://kadenandkali.com/assets/og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css?v=20261029h" />
+</head>
+<body class="locked">
+  <!-- Guest gate: same as index.html. A visitor who unlocked the main page is already through. -->
+  <div id="gate" class="gate">
+    <form id="gate-form" class="gate-form" novalidate>
+      <p class="caps label">Kaden <span class="brand-and">and</span> Kali</p>
+      <label for="gate-name" class="gate-prompt">Please enter your name as it appears on your invitation.</label>
+      <input type="text" id="gate-name" name="name" autocomplete="name" autocapitalize="words" autofocus aria-describedby="gate-status" />
+      <div class="form-actions">
+        <button type="submit" class="button" id="gate-submit">Continue</button>
+        <p class="form-status" id="gate-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+
+  <template id="site">
+  <header class="site-header">
+    <a href="index.html" class="brand">Kaden <span class="brand-and">and</span> Kali</a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav id="menu" class="menu" aria-hidden="true">
+    <ul class="menu-list">
+      <li><a href="index.html#story">Our Story</a></li>
+      <li><a href="index.html#details">The Wedding</a></li>
+      <li><a href="index.html#welcome">Welcome Party</a></li>
+      <li><a href="index.html#travel">Travel</a></li>
+    </ul>
+    <p class="menu-foot">August 14, 2027 &middot; Sun Valley, Idaho</p>
+  </nav>
+
+  <main id="top" class="subpage">
+    <section class="section section-first">
+      <div class="section-inner narrow">
+        <p class="caps label"><a href="index.html" class="back-link">&larr; Back</a></p>
+        <h1 class="display display-lg">RSVP</h1>
+        <p class="lede">Kindly reply by the first of May.</p>
+      </div>
+    </section>
+
+    <section id="rsvp" class="section section-dark">
+      <div class="section-inner narrow">
+        <form id="rsvp-form" class="form" novalidate>
+          <div class="field">
+            <label for="name" class="caps">Your name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="email" class="caps">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+
+          <!-- Filled by app.js when the gate recognized a party of more than one. -->
+          <div id="party-block" class="party-block" hidden></div>
+
+          <!-- Fallback for a single guest or an unrecognized visitor. -->
+          <div id="solo-block" class="solo-block">
+            <fieldset class="field">
+              <legend class="caps">Will you attend</legend>
+              <div class="choices">
+                <label class="choice">
+                  <input type="radio" name="attending" value="Yes" />
+                  <span>Joyfully accepts</span>
+                </label>
+                <label class="choice">
+                  <input type="radio" name="attending" value="No" />
+                  <span>Regretfully declines</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field" id="guests-row">
+              <label for="guests" class="caps">Guests in your party</label>
+              <select id="guests" name="guests">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" id="dietary-row">
+            <label for="dietary" class="caps">Dietary restrictions</label>
+            <input type="text" id="dietary" name="dietary" placeholder="Please note who, if replying for others" />
+          </div>
+
+          <div class="field">
+            <label for="message" class="caps">A note for the couple</label>
+            <textarea id="message" name="message" rows="2"></textarea>
+          </div>
+
+          <!-- Honeypot: hidden from humans, bots tend to fill it -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="button" id="submit-btn">Send reply</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="caps">Kaden <span class="brand-and">and</span> Kali &middot; August 14, 2027 &middot; Sun Valley, Idaho</p>
+  </footer>
+  </template>
+
+  <script src="../config.js?v=20261029h"></script>
+  <script src="gate.js?v=20261029h"></script>
+</body>
+</html>

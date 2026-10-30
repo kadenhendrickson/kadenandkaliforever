@@ -69,8 +69,9 @@ Never do any of the following: `git push --force`, rewriting history, committing
 | Path | What it is | Edit? |
 | --- | --- | --- |
 | `index.html` | The **"Coming soon" holding page** guests see at the root until launch. | Rarely |
-| `admin/index.html` | **The real website.** Hero, Our Story, The Wedding, Welcome Party, Travel, RSVP. Content edits go here. | Yes |
+| `admin/index.html` | **The real website.** Hero, Our Story, The Wedding, Welcome Party, Travel. Content edits go here. | Yes |
 | `admin/details.html` | **Day-of details sub-page** (schedule, attire, getting there and parking). Linked from the "Wedding details" button. Same gate. | Yes |
+| `admin/rsvp.html` | **RSVP form page.** Same gate. **Intentionally unlinked** from the main page and menus until invitations go out. | Only if asked |
 | `admin/gate.js` | The guest gate: asks for a name and checks it against the Google Sheet. | Only if asked |
 | `app.js` | Menu, countdown, RSVP form behavior. | Carefully |
 | `config.js` | Apps Script URL, wedding date, storage key. | Only the date, and only if asked |
@@ -111,7 +112,7 @@ Otherwise guests may see stale files.
 `/admin/` and the gate unlocks with no name lookup, so you always see the real site. To test the
 gate itself locally, open `http://localhost:8000/admin/?gate`.
 
-**The RSVP form writes to the real spreadsheet, even from localhost.** Do not submit the form
+**The RSVP form (`admin/rsvp.html`) writes to the real spreadsheet, even from localhost.** Do not submit the form
 while testing unless you intend to add a row. If you must test a submission, use a name that
 starts with `TEST` and tell Kaden so it can be deleted.
 
@@ -208,6 +209,11 @@ no longer true. Keep the README in step too; AGENTS.md is the short version, REA
 `admin/details.html`: the same `<div id="gate">`, its content inside `<template id="site">`,
 and the two script tags at the bottom. `gate.js` and `app.js` tolerate pages without a hero or
 RSVP form. A guest who unlocked one page is already unlocked on the others for that session.
+
+**The RSVP form is on its own page and hidden on purpose.** `admin/rsvp.html` holds the form.
+It is not linked from the main page or the menu because save-the-dates are going out and the
+couple does not want guests replying yet. Do not add a link or button to it unless Kaden or
+Kali asks. The README explains how to wire it up when the time comes.
 
 **Keep the main page light.** Save-the-date level only: the wedding section shows date, time,
 venue, and a reception note, with a button to `details.html` for everything else (attire,
