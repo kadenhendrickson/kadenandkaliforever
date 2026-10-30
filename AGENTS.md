@@ -249,7 +249,7 @@ Kaden or Kali asks.
   notes. The welcome party is not part of the RSVP form, so there is currently no way for a
   guest to reply to it.
 - The Galena Lodge street address should be verified.
-- "Our Story" is placeholder copy: one always-visible paragraph plus a collapsible
-  "Read more" block (`.story-more`, toggled in `app.js`). Travel & Stay is written (verify the drive-time figures in
+- "Our Story" is placeholder copy: one always-visible paragraph, then a teaser of the rest
+  that fades out, with a chevron that expands it (`.story-more`, toggled in `app.js`). Travel & Stay is written (verify the drive-time figures in
   "Getting here").
 - No photo placeholders remain; the hero photo is in place. Add more photos only if asked.

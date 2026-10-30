@@ -37,11 +37,9 @@ document.querySelectorAll("[data-story-toggle]").forEach((toggle) => {
   toggle.addEventListener("click", () => {
     const open = !panel.classList.contains("is-open");
     panel.classList.toggle("is-open", open);
-    panel.setAttribute("aria-hidden", String(!open));
-    if (open) panel.removeAttribute("inert"); else panel.setAttribute("inert", "");
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.textContent = open ? "Read less" : "Read more";
-    if (!open) toggle.scrollIntoView({ block: "center", behavior: "smooth" });
+    toggle.setAttribute("aria-label", open ? "Show less" : "Read more about us");
+    if (!open) panel.scrollIntoView({ block: "start", behavior: "smooth" });
   });
 });
 
