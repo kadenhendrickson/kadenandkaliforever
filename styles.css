@@ -348,7 +348,7 @@ body.menu-open { overflow: hidden; }
 @media (min-width: 720px) {
   .section-paired .columns {
     grid-template-columns: repeat(2, minmax(0, max-content));
-    column-gap: clamp(3rem, 8vw, 7rem);
+    column-gap: clamp(4rem, 12vw, 11rem);
   }
 }
 
