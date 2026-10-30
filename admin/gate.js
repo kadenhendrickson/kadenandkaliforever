@@ -15,7 +15,7 @@
    ========================================================= */
 (() => {
   const CONFIG = window.KK_CONFIG;
-  const APP_SCRIPT = "/app.js?v=20261030d";
+  const APP_SCRIPT = "/app.js?v=20261030e";
   const UNLOCK_KEY = "kk-preview-unlocked";
 
   const gate = document.getElementById("gate");

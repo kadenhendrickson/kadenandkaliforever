@@ -69,7 +69,7 @@ Never do any of the following: `git push --force`, rewriting history, committing
 | Path | What it is | Edit? |
 | --- | --- | --- |
 | `index.html` | The **"Coming soon" holding page** guests see at the root until launch. | Rarely |
-| `admin/index.html` | **The real website.** Hero, Our Story, Save the Date (picnic + wedding), Travel. Content edits go here. | Yes |
+| `admin/index.html` | **The real website.** Hero, Our Story, Save the Date (picnic + wedding), Travel & Stay (room block + two hotels + getting here). Content edits go here. | Yes |
 | `admin/details/index.html` | **Day-of details sub-page** (schedule, attire, getting there and parking). Same gate. **Intentionally unlinked** until invitations go out. | Yes |
 | `admin/rsvp/index.html` | **RSVP form page.** Same gate. **Intentionally unlinked** from the main page and menus until invitations go out. | Only if asked |
 | `admin/gate.js` | The guest gate: asks for a name and checks it against the Google Sheet. | Only if asked |
@@ -248,5 +248,6 @@ Kaden or Kali asks.
   notes. The welcome party is not part of the RSVP form, so there is currently no way for a
   guest to reply to it.
 - The Galena Lodge street address should be verified.
-- "Our Story" and "Travel & Stay" are placeholder paragraphs.
-- The second photo slot (between Travel and RSVP) is a placeholder. The hero photo is in place.
+- "Our Story" is a placeholder paragraph. Travel & Stay is written (verify the airport and
+  drive-time figures in "Getting here").
+- No photo placeholders remain; the hero photo is in place. Add more photos only if asked.

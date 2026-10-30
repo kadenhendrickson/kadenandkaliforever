@@ -259,6 +259,6 @@ query string (e.g. `?v=2`) to force a fresh preview, or keep the filename versio
   `<picture>` source). Replace both to change it; keep the photo black and white, landscape,
   with the subjects roughly centered. The header is transparent over the hero and turns solid
   once you scroll past it.
-- Other photos: replace the remaining `.photo-placeholder` div in `admin/index.html` with an
-  `<img>` tag. The CSS renders it in grayscale automatically.
+- Other photos: wrap an `<img>` in `<figure class="photo photo-inset">` anywhere in
+  `admin/index.html`. The CSS renders it in grayscale automatically.
 - Colors and fonts: the `:root` tokens at the top of `styles.css`

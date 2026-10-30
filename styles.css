@@ -801,3 +801,60 @@ body.welcome-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .heartbeat { animation: none; }
 }
+
+/* ---------- Travel & Stay ---------- */
+.stay-list {
+  list-style: none;
+  margin: 3rem 0 4rem;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.stay {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (min-width: 720px) {
+  .stay {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+  .stay-info { flex: 1 1 auto; }
+  .stay-actions { flex: 0 0 auto; align-items: flex-end; padding-top: 1.6rem; }
+}
+
+.stay-name {
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+.stay .detail { margin-top: 0; }
+
+.stay-address { margin-top: 0.75rem; color: var(--gray); }
+
+.stay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+
+.text-link {
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.15rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.text-link:hover { color: var(--ink); border-color: var(--ink); }
+
+.display-sm { font-size: clamp(1.6rem, 2.5vw, 2rem); margin-bottom: 1rem; }
