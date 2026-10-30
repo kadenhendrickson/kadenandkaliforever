@@ -6,7 +6,7 @@ to work here safely.
 
 ## What this is
 
-The wedding website for **Kali and Kaden**. Wedding: **Saturday, August 14, 2027** at
+The wedding website for **Kaden and Kali**. Wedding: **Saturday, August 14, 2027** at
 **Galena Lodge, Sun Valley, Idaho**. Live at **https://kadenandkali.com**, hosted on GitHub
 Pages straight from the `main` branch. There is no build step: the files in this repo are the
 files guests download.
@@ -153,8 +153,8 @@ The look is modeled on Bliss & Bone's "Rivera" template: classic, quiet, editori
 3. Open the browser console. There should be no errors.
 4. If you touched the menu, countdown, or form, click through them. Do not submit the form.
 5. If you changed CSS or JavaScript, confirm you bumped the `?v=` version strings.
-6. Read the page copy once more as a guest would. Names are **Kali** and **Kaden**, in that
-   order.
+6. Read the page copy once more as a guest would. Names are **Kaden** and **Kali**, in that
+   order, matching the domain kadenandkali.com.
 
 ## Adding photos
 
@@ -168,7 +168,7 @@ less, under 500 KB each. Replace the placeholder:
 with
 
 ```html
-<img src="/assets/your-photo.jpg" alt="Kali and Kaden at ..." />
+<img src="/assets/your-photo.jpg" alt="Kaden and Kali at ..." />
 ```
 
 Keep the `<figure class="photo ...">` wrapper. The grayscale treatment is automatic.

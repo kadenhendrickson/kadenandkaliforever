@@ -1,6 +1,6 @@
 # Wedding Website
 
-Kali and Kaden's wedding site. Galena Lodge, Sun Valley, Idaho. August 14, 2027.
+Kaden and Kali's wedding site. Galena Lodge, Sun Valley, Idaho. August 14, 2027.
 
 A single-page, responsive site with no build step. RSVPs are written to a
 Google Sheet through a Google Apps Script web app.
