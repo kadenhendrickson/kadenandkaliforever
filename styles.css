@@ -331,14 +331,24 @@ body.menu-open { overflow: hidden; }
 
 .section-inner { max-width: var(--wide); margin: 0 auto; }
 .section-inner.narrow { max-width: var(--measure); }
-.section-inner.medium { max-width: 56rem; }
+/* Paired events (Save the Date): left-aligned text, but the pair of columns
+   is sized to its content and centered as a group, label included. */
+.section-paired .columns {
+  grid-template-columns: minmax(0, 1fr);
+  justify-content: center;
+}
 
-/* Centered variant, used for paired events in Save the Date */
-.section-center { text-align: center; }
-.section-center .label { text-align: center; }
-.section-center .detail,
-.section-center .lede { margin-left: auto; margin-right: auto; }
-.section-center .columns { justify-content: center; }
+.section-paired .columns-label {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+@media (min-width: 720px) {
+  .section-paired .columns {
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    column-gap: clamp(3rem, 8vw, 7rem);
+  }
+}
 
 .columns {
   display: grid;
