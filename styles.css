@@ -858,3 +858,44 @@ body.welcome-open { overflow: hidden; }
 .text-link:hover { color: var(--ink); border-color: var(--ink); }
 
 .display-sm { font-size: clamp(1.6rem, 2.5vw, 2rem); margin-bottom: 1rem; }
+
+/* ---------- Our Story: collapsible ---------- */
+.story-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.story-more.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.story-more-inner { overflow: hidden; }
+
+.story-heading {
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin: 2.25rem 0 0.75rem;
+}
+
+.story-more .detail { margin-top: 0; }
+.story-more .detail + .detail { margin-top: 1rem; }
+
+.story-toggle {
+  display: inline-block;
+  margin-top: 1.75rem;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 0 0 0.15rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-more { transition: none; }
+}

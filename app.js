@@ -29,6 +29,23 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* =========================================================
+   Our Story: read more / read less
+   ========================================================= */
+document.querySelectorAll("[data-story-toggle]").forEach((toggle) => {
+  const panel = document.getElementById(toggle.getAttribute("aria-controls"));
+  if (!panel) return;
+  toggle.addEventListener("click", () => {
+    const open = !panel.classList.contains("is-open");
+    panel.classList.toggle("is-open", open);
+    panel.setAttribute("aria-hidden", String(!open));
+    if (open) panel.removeAttribute("inert"); else panel.setAttribute("inert", "");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "Read less" : "Read more";
+    if (!open) toggle.scrollIntoView({ block: "center", behavior: "smooth" });
+  });
+});
+
+/* =========================================================
    Date display + countdown
    ========================================================= */
 const weddingDate = new Date(CONFIG.WEDDING_DATE_ISO);

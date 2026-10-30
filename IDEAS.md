@@ -23,3 +23,30 @@ Notes for whoever builds it:
   alternate sides of the rail.
 - Content needed before building: confirmed times for Friday, Saturday, and anything on
   Sunday.
+
+## Ways to tell the engagement story
+
+*Added 2026-10-30 by Kaden (ideas drafted with Claude).*
+
+The Our Story section now opens with one always-visible paragraph and a "Read more" that
+unfolds the rest. Some directions for what the longer version could become:
+
+- **Chapters.** Three or four short titled pieces ("The Match", "The First Trip", "The
+  Question"), each with a small-caps date and one or two paragraphs. Easy to write, easy to
+  skim, and it fits the collapsible as-is.
+- **Two voices.** The proposal told twice, side by side: "In Kaden's words" and "In Kali's
+  words". Guests love the mismatch in what each person remembers. Works as two columns on
+  desktop, stacked on phones.
+- **A map of places.** A minimal line-drawn map (hairline strokes, no color) marking where you
+  met, a first-date spot, and where the proposal happened, each with a sentence. Could be a
+  single inline SVG.
+- **The photo pair.** Two black-and-white photographs under the story: one from early on, one
+  from the engagement. The grayscale treatment is already automatic.
+- **Hidden heart.** Tapping the ♡ on the holding page, or a small ♡ at the end of the story,
+  reveals one private-feeling sentence: the thing you said to each other right after.
+- **The story so far, as a rail.** Reuse the scroll-driven timeline idea above for the
+  relationship itself, then hand off to the weekend timeline on the details page. Same visual
+  language, two timelines.
+- **Guest contributions.** A line at the end inviting guests to send a memory or a photo of the
+  two of you, collected through a simple Apps Script form like the RSVP. Could become a page of
+  its own later.

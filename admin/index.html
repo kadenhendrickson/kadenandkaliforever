@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/styles.css?v=20261030e" />
+  <link rel="stylesheet" href="/styles.css?v=20261030g" />
 </head>
 <body class="locked">
   <!-- Guest gate: removed on launch day. See README. -->
@@ -97,9 +97,33 @@
         <p class="caps label">Our Story</p>
         <h2 class="display">A few words about us</h2>
         <p class="lede">
-          This is a placeholder for your story. Write a few sentences about how you met,
-          your favorite memories together, and what you are most looking forward to.
+          Placeholder for the opening of your story: a few sentences about how you met and the
+          moment you both knew. This paragraph is always visible, so make it the one you would
+          tell at a dinner party.
         </p>
+
+        <div class="story-more" id="story-more" aria-hidden="true" inert>
+          <div class="story-more-inner">
+            <h3 class="story-heading">How it started</h3>
+            <p class="detail">
+              Placeholder for the longer version: the first date, the trip that made it real,
+              the small habits that became traditions. Two or three paragraphs is plenty.
+            </p>
+            <p class="detail">
+              Placeholder for a second paragraph, if you want one.
+            </p>
+
+            <h3 class="story-heading">The proposal</h3>
+            <p class="detail">
+              Placeholder for the engagement story: where you were, who knew, what was said,
+              and the detail you still laugh about.
+            </p>
+          </div>
+        </div>
+
+        <button type="button" class="text-link caps story-toggle" data-story-toggle aria-expanded="false" aria-controls="story-more">
+          Read more
+        </button>
       </div>
     </section>
 
@@ -225,7 +249,7 @@
 
   </template>
 
-  <script src="/config.js?v=20261030e"></script>
-  <script src="/admin/gate.js?v=20261030e"></script>
+  <script src="/config.js?v=20261030g"></script>
+  <script src="/admin/gate.js?v=20261030g"></script>
 </body>
 </html>
