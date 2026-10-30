@@ -34,13 +34,16 @@ document.addEventListener("keydown", (e) => {
 const weddingDate = new Date(CONFIG.WEDDING_DATE_ISO);
 
 // The hero shows the date as "08 . 14 . 27"; keep the full date in a tooltip.
-document.getElementById("hero-date").title = weddingDate.toLocaleDateString("en-US", {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  timeZone: CONFIG.TIMEZONE,
-});
+const heroDateEl = document.getElementById("hero-date");
+if (heroDateEl) {
+  heroDateEl.title = weddingDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: CONFIG.TIMEZONE,
+  });
+}
 
 /* =========================================================
    Header: transparent over the photo hero, solid after scrolling
@@ -59,6 +62,7 @@ if (header && hero) {
 
 function updateCountdown() {
   const el = document.getElementById("countdown");
+  if (!el) return;
   const diffMs = weddingDate.getTime() - Date.now();
   if (diffMs <= 0) {
     el.textContent = "Today is the day";
@@ -71,9 +75,12 @@ updateCountdown();
 setInterval(updateCountdown, 60_000);
 
 /* =========================================================
-   RSVP form
+   RSVP form (only on pages that have one)
    ========================================================= */
 const form = document.getElementById("rsvp-form");
+if (form) initRsvp();
+
+function initRsvp() {
 const statusEl = document.getElementById("form-status");
 const submitBtn = document.getElementById("submit-btn");
 const nameInput = document.getElementById("name");
@@ -93,8 +100,8 @@ const partyMembers = (recognizedGuest && Array.isArray(recognizedGuest.partyMemb
   ? recognizedGuest.partyMembers.filter(Boolean)
   : [];
 const maxGuests = recognizedGuest ? Math.max(1, Number(recognizedGuest.maxGuests) || 1) : 1;
-const extraSeats = Math.max(0, maxGuests - partyMembers.length);
-const partyMode = partyMembers.length > 1 || extraSeats > 0;
+const extraSeats = recognizedGuest ? Math.max(0, maxGuests - partyMembers.length) : 0;
+const partyMode = Boolean(recognizedGuest) && (partyMembers.length > 1 || extraSeats > 0);
 
 // Previous replies for this party, returned by the gate lookup.
 const replies = (recognizedGuest && Array.isArray(recognizedGuest.replies)) ? recognizedGuest.replies : [];
@@ -343,3 +350,4 @@ form.addEventListener("submit", async (e) => {
     submitBtn.disabled = false;
   }
 });
+}

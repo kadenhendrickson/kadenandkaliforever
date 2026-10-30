@@ -655,3 +655,26 @@ body.locked { overflow: hidden; }
   opacity: 0.55;
   margin-left: 0.5rem;
 }
+
+/* ---------- The Wedding: single column + action ---------- */
+.detail-note { font-style: italic; }
+
+.columns-action { align-items: center; }
+
+.col-action { display: flex; }
+
+@media (min-width: 720px) {
+  .col-action { justify-content: flex-end; }
+}
+
+/* Outlined button for light backgrounds */
+.button-ink { color: var(--ink); border-color: var(--ink); }
+.button-ink:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- Sub-pages (admin/details.html) ---------- */
+.subpage .section-first { padding-top: calc(var(--header-h) + clamp(3rem, 8vw, 6rem)); }
+
+.display-lg { font-size: clamp(2.5rem, 5vw, 3.75rem); }
+
+.back-link { color: var(--gray); }
+.back-link:hover { color: var(--ink); }

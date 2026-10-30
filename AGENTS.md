@@ -69,7 +69,8 @@ Never do any of the following: `git push --force`, rewriting history, committing
 | Path | What it is | Edit? |
 | --- | --- | --- |
 | `index.html` | The **"Coming soon" holding page** guests see at the root until launch. | Rarely |
-| `admin/index.html` | **The real website.** Hero, Our Story, The Wedding, Travel, RSVP. Content edits go here. | Yes |
+| `admin/index.html` | **The real website.** Hero, Our Story, The Wedding, Welcome Party, Travel, RSVP. Content edits go here. | Yes |
+| `admin/details.html` | **Day-of details sub-page** (schedule, attire, getting there and parking). Linked from the "Wedding details" button. Same gate. | Yes |
 | `admin/gate.js` | The guest gate: asks for a name and checks it against the Google Sheet. | Only if asked |
 | `app.js` | Menu, countdown, RSVP form behavior. | Carefully |
 | `config.js` | Apps Script URL, wedding date, storage key. | Only the date, and only if asked |
@@ -82,7 +83,7 @@ Never do any of the following: `git push --force`, rewriting history, committing
 
 ## Things that are not obvious from the code
 
-**The site content is inside a `<template>`.** In `admin/index.html`, everything between
+**The site content is inside a `<template>`.** In `admin/index.html` (and `admin/details.html`), everything between
 `<template id="site">` and `</template>` is the website. It is inert until the gate unlocks it,
 so a browser never renders it directly. Edit text inside the template exactly as if it were
 normal HTML.
@@ -203,9 +204,20 @@ repo works, update this file in the same pull request. That includes, at minimum
 Before opening a pull request, reread the sections this change touches and fix anything that is
 no longer true. Keep the README in step too; AGENTS.md is the short version, README is the full one.
 
+**Sub-pages share the gate.** Any new page under `admin/` must copy the structure of
+`admin/details.html`: the same `<div id="gate">`, its content inside `<template id="site">`,
+and the two script tags at the bottom. `gate.js` and `app.js` tolerate pages without a hero or
+RSVP form. A guest who unlocked one page is already unlocked on the others for that session.
+
+**Keep the main page light.** Save-the-date level only: the wedding section shows date, time,
+venue, and a reception note, with a button to `details.html` for everything else (attire,
+parking, schedule). Put new day-of detail on the details page, not the main page.
+
 ## Known placeholders still to fill in
 
-- Ceremony and reception times in `admin/index.html` are placeholders (four and six o'clock).
+- Ceremony and reception times (four and six o'clock) in `admin/index.html` and
+  `admin/details.html` are placeholders.
+- `admin/details.html` is placeholder copy throughout (schedule, attire, parking).
 - The whole **Welcome Party** section in `admin/index.html` is placeholder text: time, venue,
   street address, and the description. The date is assumed to be Friday, August 13, 2027, the
   evening before the wedding; confirm it. The section deliberately carries no attire or arrival

@@ -15,7 +15,7 @@
    ========================================================= */
 (() => {
   const CONFIG = window.KK_CONFIG;
-  const APP_SCRIPT = "../app.js?v=20261029e";
+  const APP_SCRIPT = "../app.js?v=20261029f";
   const UNLOCK_KEY = "kk-preview-unlocked";
 
   const gate = document.getElementById("gate");
@@ -30,7 +30,7 @@
     template.remove();
     gate.remove();
     document.body.classList.remove("locked");
-    document.title = "Kali & Kaden";
+    document.title = document.title.replace(/\s*·\s*Preview$/, "");
 
     const script = document.createElement("script");
     script.src = APP_SCRIPT;
