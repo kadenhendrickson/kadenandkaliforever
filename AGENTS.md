@@ -69,8 +69,8 @@ Never do any of the following: `git push --force`, rewriting history, committing
 | Path | What it is | Edit? |
 | --- | --- | --- |
 | `index.html` | The **"Coming soon" holding page** guests see at the root until launch. | Rarely |
-| `admin/index.html` | **The real website.** Hero, Our Story, The Wedding, Welcome Party, Travel. Content edits go here. | Yes |
-| `admin/details.html` | **Day-of details sub-page** (schedule, attire, getting there and parking). Linked from the "Wedding details" button. Same gate. | Yes |
+| `admin/index.html` | **The real website.** Hero, Our Story, Save the Date (picnic + wedding), Travel. Content edits go here. | Yes |
+| `admin/details.html` | **Day-of details sub-page** (schedule, attire, getting there and parking). Same gate. **Intentionally unlinked** until invitations go out. | Yes |
 | `admin/rsvp.html` | **RSVP form page.** Same gate. **Intentionally unlinked** from the main page and menus until invitations go out. | Only if asked |
 | `admin/gate.js` | The guest gate: asks for a name and checks it against the Google Sheet. | Only if asked |
 | `app.js` | Menu, countdown, RSVP form behavior. | Carefully |
@@ -215,9 +215,11 @@ It is not linked from the main page or the menu because save-the-dates are going
 couple does not want guests replying yet. Do not add a link or button to it unless Kaden or
 Kali asks. The README explains how to wire it up when the time comes.
 
-**Keep the main page light.** Save-the-date level only: the wedding section shows date, time,
-venue, and a reception note, with a button to `details.html` for everything else (attire,
-parking, schedule). Put new day-of detail on the details page, not the main page.
+**Keep the main page light.** Save-the-date level only: Our Story, a Save the Date section
+with the Welcome Picnic and the Wedding side by side (date, time, venue, reception note), and
+Travel. Everything else (attire, parking, schedule) goes on `details.html`, which is hidden
+until the couple decides to surface it. Do not add sections or links to the main page unless
+Kaden or Kali asks.
 
 ## Known placeholders still to fill in
 

@@ -11,7 +11,7 @@ Google Sheet through a Google Apps Script web app.
 | --- | --- |
 | `index.html` | **Coming-soon page** served at the root until launch |
 | `admin/index.html` | The real site, behind the guest gate |
-| `admin/details.html` | Gated sub-page for day-of details (schedule, attire, parking). Placeholder content. |
+| `admin/details.html` | Gated sub-page for day-of details (schedule, attire, parking). Placeholder content. **Not linked yet.** |
 | `admin/rsvp.html` | Gated sub-page holding the RSVP form. **Not linked from the main page yet.** |
 | `admin/gate.js` | The gate: asks for a name, checks it with the Apps Script, unlocks for the session |
 | `config.js` | Shared config: Apps Script URL, wedding date, storage key. **Edit here.** |
@@ -104,6 +104,15 @@ locally against the live Apps Script.
    them (their links already point at `index.html`, which still works from the root).
 5. Delete the `admin/` folder.
 6. Commit and push.
+
+## Main page scope (save-the-date)
+
+Until invitations go out, `admin/index.html` carries only save-the-date content: the hero,
+Our Story, a **Save the Date** section with two columns (the Welcome Picnic on Friday and the
+Wedding on Saturday), and Travel & Stay. Day-of detail (attire, parking, schedule) lives on
+`admin/details.html`, and the form on `admin/rsvp.html`; neither is linked from the main page
+or menus yet. To surface the details page later, add an outlined button
+(`<a href="details.html" class="button button-ink">`) in the Save the Date section.
 
 ## RSVP page
 
