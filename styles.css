@@ -18,11 +18,11 @@
   --serif-display: "Cormorant Garamond", "Cormorant", Georgia, serif;
   --serif-text: "EB Garamond", Garamond, Georgia, serif;
 
-  --measure: 36rem;          /* body copy measure inside the content column */
-  --content: 42rem;          /* the single content column every text section uses */
+  --measure: 38rem;          /* body copy measure inside the content column */
+  --content: 46rem;          /* the single content column every text section uses */
   --wide: 72rem;             /* hero only */
   --h-section: clamp(2rem, 3.2vw, 2.75rem);
-  --h-item: 1.65rem;
+  --h-item: 1.75rem;
   --gutter: clamp(1.25rem, 5vw, 4rem);
   --header-h: 3.5rem;
 }
@@ -59,7 +59,7 @@ img { display: block; max-width: 100%; }
   line-height: 1.9;
 }
 
-.label { margin-bottom: 1.5rem; color: var(--gray); }
+.label { margin-bottom: 1.75rem; color: var(--gray); }
 .label-sm { margin-bottom: 0.5rem; color: var(--gray); }
 
 .display {
@@ -68,7 +68,7 @@ img { display: block; max-width: 100%; }
   font-size: var(--h-section);
   line-height: 1.1;
   letter-spacing: 0.01em;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Item-level titles: events, hotels, story chapters, sub-headings */
@@ -344,7 +344,7 @@ body.menu-open { overflow: hidden; }
 .photo-placeholder .caps { color: var(--gray-light); }
 
 /* ---------- Sections ---------- */
-.section { padding: clamp(4rem, 7vw, 6rem) var(--gutter); }
+.section { padding: clamp(4.5rem, 8vw, 7rem) var(--gutter); }
 
 .section-inner { max-width: var(--content); margin: 0 auto; }
 .section-inner.narrow { max-width: var(--content); }
@@ -358,7 +358,7 @@ body.menu-open { overflow: hidden; }
 @media (min-width: 720px) {
   .section-paired .columns {
     grid-template-columns: 1fr 1fr;
-    column-gap: 3rem;
+    column-gap: 4rem;
   }
 }
 
@@ -815,7 +815,7 @@ body.welcome-open { overflow: hidden; }
 /* ---------- Travel & Stay ---------- */
 .stay-list {
   list-style: none;
-  margin: 2.5rem 0 3rem;
+  margin: 3rem 0 3.5rem;
   padding: 0;
   border-top: 1px solid var(--rule);
 }
@@ -824,7 +824,7 @@ body.welcome-open { overflow: hidden; }
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  padding: 1.5rem 0;
+  padding: 1.75rem 0;
   border-bottom: 1px solid var(--rule);
 }
 
@@ -887,7 +887,7 @@ body.welcome-open { overflow: hidden; }
 
 .story-more.is-open::after { opacity: 0; }
 
-.story-heading { margin: 2rem 0 0.6rem; }
+.story-heading { margin: 2.25rem 0 0.75rem; }
 
 .story-more .detail { margin-top: 0; }
 .story-more .detail + .detail { margin-top: 1rem; }
